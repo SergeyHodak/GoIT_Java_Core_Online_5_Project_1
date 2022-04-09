@@ -12,6 +12,23 @@ repositories {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    //https://search.maven.org/artifact/org.telegram/telegrambots/5.7.1/jar
+    implementation 'org.telegram:telegrambots:5.7.1'
+
+    //https://search.maven.org/artifact/com.github.hazendaz.jsoup/jsoup/1.15.1/jar
+    implementation 'com.github.hazendaz.jsoup:jsoup:1.15.1'
+
+    //https://search.maven.org/artifact/org.touchbit.retrofit.veslo/gson/1.2.0/jar
+    implementation 'org.touchbit.retrofit.veslo:gson:1.2.0'
+
+    //https://search.maven.org/artifact/io.github.qsy7.java.dependencies/lombok/0.1.2/pom
+    implementation 'io.github.qsy7.java.dependencies:lombok:0.1.2'
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
+
+
+    //https://search.maven.org/artifact/org.telegram/telegrambotsextensions/5.7.1/jar
+    implementation 'org.telegram:telegrambotsextensions:5.7.1'
 }
 
 test {
