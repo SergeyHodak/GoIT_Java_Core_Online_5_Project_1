@@ -1,4 +1,4 @@
-package com.goit.project.currency.dto;
+package body.bank;
 
 public enum Currency {
     USD,

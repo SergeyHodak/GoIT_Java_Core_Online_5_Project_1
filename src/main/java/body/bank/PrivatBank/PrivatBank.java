@@ -1,7 +1,7 @@
-package com.goit.project.currency;
+package body.bank.PrivatBank;
 
-import com.goit.project.currency.dto.Currency;
-import com.goit.project.currency.dto.CurrencyItem;
+import body.bank.Currency;
+import body.bank.CurrencyService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.jsoup.Jsoup;

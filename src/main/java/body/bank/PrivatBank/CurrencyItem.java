@@ -1,5 +1,6 @@
-package com.goit.project.currency.dto;
+package body.bank.PrivatBank;
 
+import body.bank.Currency;
 import lombok.Data;
 
 @Data
