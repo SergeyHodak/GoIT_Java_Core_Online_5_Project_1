@@ -1,3 +1,5 @@
+package body.bank.monobank;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.*;
@@ -36,8 +38,14 @@ public class ParserMB {
 
         }
         return Float.parseFloat(null);
+    }
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+        System.out.println(buy(Currency.EUR));
+        System.out.println(buy(Currency.USD));
+    }
 }
-}
+
 @Data
 class JsonMB {
     private int currencyCodeA;
@@ -58,6 +66,3 @@ enum Currency {
     USD,
     EUR
 }
-
-
-
