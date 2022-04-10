@@ -67,12 +67,6 @@ class JsonMB {
     private float rateBuy;
     private float rateCross;
 
-    @Override
-    public String toString() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(this);
-    }
-
 }
 enum Currency {
     USD,
