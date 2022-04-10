@@ -36,8 +36,13 @@ public class ParserMB {
 
         }
         return Float.parseFloat(null);
+    }
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+        System.out.println(buy(Currency.USD));
+    }
 }
-}
+
 @Data
 class JsonMB {
     private int currencyCodeA;
@@ -58,6 +63,3 @@ enum Currency {
     USD,
     EUR
 }
-
-
-
