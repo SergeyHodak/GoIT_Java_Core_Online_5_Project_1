@@ -8,7 +8,12 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class ParserMB {
-    public static float buy (Currency currencyMB) throws IOException, InterruptedException, IllegalStateException {
+    public static void main(String[] args) throws IOException, InterruptedException {
+        System.out.println("buy(Currency.USD) = " + buy(Currency.USD));
+        System.out.println("buy(Currency.EUR) = " + buy(Currency.EUR));
+        System.out.println("buy(Currency.USD) = " + buy(Currency.USD));
+    }
+    private static HttpResponse<String> sendRequest() throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         String uri = "https://api.monobank.ua/bank/currency";
         HttpRequest request = HttpRequest.newBuilder()
@@ -16,8 +21,26 @@ public class ParserMB {
                 .GET()
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return response;
+    }
+    public static float buy (Currency currencyMB) throws IOException, InterruptedException, IllegalStateException {
+        String stringOfCurrencies="";
+        HttpResponse<String> response = sendRequest();
+        if(response.statusCode()!=200){
+            while (response.statusCode()!=200){
+                Thread.sleep(2000);
+                response = sendRequest();
+                if(response.statusCode()==200){
+                    stringOfCurrencies = String.valueOf(response.body());
+                }
+            }
+        }
+        else {
+            stringOfCurrencies = String.valueOf(response.body());
+        }
+
         Gson gson = new Gson();
-        JsonMB[] currencies = gson.fromJson(response.body(), JsonMB[].class);
+        JsonMB[] currencies = gson.fromJson(stringOfCurrencies, JsonMB[].class);
         switch (currencyMB){
             case EUR :
                 for (JsonMB monoBankCurrency : currencies) {
