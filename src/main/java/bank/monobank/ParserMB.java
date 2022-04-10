@@ -8,11 +8,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class ParserMB {
-    public static void main(String[] args) throws IOException, InterruptedException {
-        System.out.println("buy(Currency.USD) = " + buy(Currency.USD));
-        System.out.println("buy(Currency.EUR) = " + buy(Currency.EUR));
-        System.out.println("buy(Currency.USD) = " + buy(Currency.USD));
-    }
+  
     private static HttpResponse<String> sendRequest() throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         String uri = "https://api.monobank.ua/bank/currency";
