@@ -1,4 +1,4 @@
-package telegram;
+package com.goit.project.telegram;
 
 public class ConstantData {
     public static final String BOT_NAME = "SpyForExchangeRates_bot";

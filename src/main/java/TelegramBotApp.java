@@ -1,4 +1,4 @@
-import body.telegram.BotInitialization;
+import com.goit.project.telegram.BotInitialization;
 
 public class TelegramBotApp {
     public static void main(String[] args) {
