@@ -1,7 +1,4 @@
-package bank.monobank;
-
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import lombok.*;
 import java.io.IOException;
 import java.net.URI;
@@ -55,8 +52,43 @@ public class ParserMB {
                 }
 
         }
-        return Float.parseFloat(null);
-}
+        return Float.parseFloat(null); }
+    public static float sell (Currency currencyMB) throws IOException, InterruptedException, IllegalStateException {
+        String stringOfCurrencies="";
+        HttpResponse<String> response = sendRequest();
+        if(response.statusCode()!=200){
+            while (response.statusCode()!=200){
+                Thread.sleep(2000);
+                response = sendRequest();
+                if(response.statusCode()==200){
+                    stringOfCurrencies = String.valueOf(response.body());
+                }
+            }
+        }
+        else {
+            stringOfCurrencies = String.valueOf(response.body());
+        }
+
+        Gson gson = new Gson();
+        JsonMB[] currencies = gson.fromJson(stringOfCurrencies, JsonMB[].class);
+        switch (currencyMB){
+            case EUR :
+                for (JsonMB monoBankCurrency : currencies) {
+                    if (monoBankCurrency.getCurrencyCodeA()== 978) {
+                        return monoBankCurrency.getRateSell();
+                    }
+                }
+
+
+            case USD :
+                for (JsonMB monoBankCurrency : currencies) {
+                    if (monoBankCurrency.getCurrencyCodeA() == 840) {
+                        return monoBankCurrency.getRateSell();
+                    }
+                }
+
+        }
+        return Float.parseFloat(null); }
 }
 @Data
 class JsonMB {
