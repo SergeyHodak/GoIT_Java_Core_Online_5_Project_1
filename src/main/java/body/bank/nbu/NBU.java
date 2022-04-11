@@ -1,5 +1,7 @@
 package body.bank.nbu;
 
+import body.bank.Currency;
+import body.bank.CurrencyService;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -8,8 +10,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public class ParserNBU {
-    public float buy(Currency currencyNBU) throws IOException, InterruptedException, IllegalStateException {
+public class NBU implements CurrencyService {
+    public double getRate(Currency currencyNBU) throws IOException, InterruptedException, IllegalStateException {
         String uri = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
 
         HttpClient client = HttpClient.newHttpClient();

@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import lombok.Data;
 
 @Data
-class JsonMB {
+public class JsonMB {
     private int currencyCodeA;
     private int currencyCodeB;
     private int date;
