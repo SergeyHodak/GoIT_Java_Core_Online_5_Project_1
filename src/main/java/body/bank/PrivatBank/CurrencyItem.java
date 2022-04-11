@@ -10,5 +10,3 @@ public class CurrencyItem {
     private float buy;
     private float sale;
 }
-
-

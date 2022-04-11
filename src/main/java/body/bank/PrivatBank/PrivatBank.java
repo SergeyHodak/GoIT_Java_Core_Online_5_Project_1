@@ -5,17 +5,15 @@ import body.bank.CurrencyService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.jsoup.Jsoup;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
 public class PrivatBank implements CurrencyService {
-    @Override
-    public double getRate(Currency currency) {
-        String url = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
+    private static final String url = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
+    private final List<CurrencyItem> currencyItems;
 
-        //Get JSON
+    public PrivatBank() {
         String json;
         try {
             json = Jsoup
@@ -32,14 +30,34 @@ public class PrivatBank implements CurrencyService {
         Type typeToken = TypeToken
                 .getParameterized(List.class, CurrencyItem.class)
                 .getType();
-        List<CurrencyItem> currencyItems = new Gson().fromJson(json, typeToken);
-
-        return currencyItems.stream()
-                .filter(it -> it.getCcy() == currency)
-                .filter(it -> it.getBase_ccy() == Currency.UAH)
-                .map(CurrencyItem::getBuy)
-                .findFirst()
-                .orElseThrow();
+        currencyItems = new Gson().fromJson(json, typeToken);
     }
 
+    @Override
+    public float[] getBuy(Currency[] currency) {
+        float[] result = new float[currency.length];
+        for (int i = 0; i < currency.length; i++) {
+            for (CurrencyItem pb : currencyItems) {
+                if (pb.getCcy() == currency[i] & pb.getBase_ccy() == Currency.UAH) {
+                    result[i] = pb.getBuy();
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public float[] getSale(Currency[] currency) {
+        float[] result = new float[currency.length];
+        for (int i = 0; i < currency.length; i++) {
+            for (CurrencyItem pb : currencyItems) {
+                if (pb.getCcy() == currency[i] & pb.getBase_ccy() == Currency.UAH) {
+                    result[i] = pb.getSale();
+                    break;
+                }
+            }
+        }
+        return result;
+    }
 }
