@@ -24,8 +24,7 @@ dependencies {
 
     //https://search.maven.org/artifact/io.github.qsy7.java.dependencies/lombok/0.1.2/pom
     implementation 'io.github.qsy7.java.dependencies:lombok:0.1.2'
-
-   annotationProcessor 'org.projectlombok:lombok:1.18.8'
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
 
 
     //https://search.maven.org/artifact/org.telegram/telegrambotsextensions/5.7.1/jar
