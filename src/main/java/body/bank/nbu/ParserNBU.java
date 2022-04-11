@@ -7,6 +7,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Arrays;
 
 public class ParserNBU {
     public float buy(Currency currencyNBU) throws IOException, InterruptedException, IllegalStateException {
@@ -22,18 +23,19 @@ public class ParserNBU {
 
         Gson gson = new Gson();
         JsonNBU[] currencies = gson.fromJson(response.body(), JsonNBU[].class);
+        System.out.println(Arrays.toString(currencies));
 
         switch (currencyNBU) {
             case EUR:
                 for (JsonNBU currency : currencies) {
-                    if (currency.getCc().equals(Currency.EUR.name())) {
+                    if (currency.getCc() == Currency.EUR) {
                         return currency.getRate();
                     }
                 }
 
             case USD:
                 for (JsonNBU currency : currencies) {
-                    if (currency.getCc().equals(Currency.USD.name())) {
+                    if (currency.getCc() == Currency.USD) {
                         return currency.getRate();
                     }
                 }
