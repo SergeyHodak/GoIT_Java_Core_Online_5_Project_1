@@ -22,4 +22,15 @@ public class ChatSettings {
         doNotify = true;
         notificationHour = 9;
     }
+    @Override
+    public String toString(){
+        String result = "";
+        result += ("isUsdNeed = " + isUsdNeed);
+        result += ("\nisEurNeed = " + isEurNeed);
+        result += ("\nbank = " + bank);
+        result += ("\nquantityOfSignsAfterDot =  = " + quantityOfSignsAfterDot);
+        result += ("\ndoNotify = " + doNotify);
+        result += ("\nnotificationHour = " + notificationHour);
+        return result;
+    }
 }
