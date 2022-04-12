@@ -10,5 +10,3 @@ public class JsonPB {
     private float buy;
     private float sale;
 }
-
-
