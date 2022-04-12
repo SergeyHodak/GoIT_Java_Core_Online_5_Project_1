@@ -1,4 +1,4 @@
-package body.bank.PrivatBank;
+package body.bank.pb;
 
 import body.bank.Currency;
 import lombok.Data;

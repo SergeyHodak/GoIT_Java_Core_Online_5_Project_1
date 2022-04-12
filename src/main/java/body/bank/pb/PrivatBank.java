@@ -1,4 +1,4 @@
-package body.bank.PrivatBank;
+package body.bank.pb;
 
 import body.bank.Currency;
 import body.bank.CurrencyService;
@@ -32,22 +32,13 @@ public class PrivatBank implements CurrencyService {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return response;
     }
+
     @Override
     public HashMap<String, BigDecimal> getRate() throws IOException, InterruptedException {
         String stringOfCurrencies = "";
         HttpResponse<String> response = sendRequest();
-        if(response.statusCode()!=200){
-            while (response.statusCode()!=200){
-                Thread.sleep(2000);
-                response = sendRequest();
-                if(response.statusCode()==200){
-                    stringOfCurrencies = String.valueOf(response.body());
-                }
-            }
-        }
-        else {
-            stringOfCurrencies = String.valueOf(response.body());
-        }
+        stringOfCurrencies = String.valueOf(response.body());
+
 
         Type typeToken = TypeToken
                 .getParameterized(List.class, JsonPB.class)
@@ -61,10 +52,10 @@ public class PrivatBank implements CurrencyService {
 
     private static HashMap<String, BigDecimal> getCurrenciesOfBankInHashMap(List<JsonPB> currencies) {
         HashMap<String, BigDecimal> currencyMap = new HashMap<>();
-        for (Currency currency: Currency.values()) {
+        for (Currency currency : Currency.values()) {
             List<BigDecimal> temp1 = getCurrenciesOfBank(currency, currencies);
             for (int j = 0; j < buy_sale.size(); j++) {
-                currencyMap.put(currency + buy_sale.get(j),
+                currencyMap.put(currency + "pb" + buy_sale.get(j),
                         temp1.get(j));
             }
         }

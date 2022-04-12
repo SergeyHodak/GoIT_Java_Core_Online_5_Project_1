@@ -1,4 +1,4 @@
-package body.bank;
+package body.response;
 
 public enum ChoiceBank {
     NBU,
