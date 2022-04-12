@@ -3,43 +3,86 @@ package body.bank.PrivatBank;
 import body.bank.Currency;
 import body.bank.CurrencyService;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import org.jsoup.Jsoup;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PrivatBank implements CurrencyService {
-    @Override
-    public double getRate(Currency currency) {
-        String url = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final List<String> buy_sale = List.of(new String[]{"Buy", "Sale"});
 
-        //Get JSON
-        String json;
-        try {
-            json = Jsoup
-                    .connect(url)
-                    .ignoreContentType(true)
-                    .get()
-                    .body()
-                    .text();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new IllegalStateException("Can't connect to Privat API");
+    private static HttpResponse<String> sendRequest() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        String uri = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return response;
+    }
+    @Override
+    public HashMap<String, BigDecimal> getRate() throws IOException, InterruptedException {
+        String stringOfCurrencies = "";
+        HttpResponse<String> response = sendRequest();
+        if(response.statusCode()!=200){
+            while (response.statusCode()!=200){
+                Thread.sleep(2000);
+                response = sendRequest();
+                if(response.statusCode()==200){
+                    stringOfCurrencies = String.valueOf(response.body());
+                }
+            }
+        }
+        else {
+            stringOfCurrencies = String.valueOf(response.body());
         }
 
         Type typeToken = TypeToken
-                .getParameterized(List.class, CurrencyItem.class)
+                .getParameterized(List.class, JsonPB.class)
                 .getType();
-        List<CurrencyItem> currencyItems = new Gson().fromJson(json, typeToken);
+        List<JsonPB> currencyItems = GSON.fromJson(stringOfCurrencies, typeToken);
 
-        return currencyItems.stream()
+        HashMap<String, BigDecimal> currencyPB = getCurrenciesOfBankInHashMap(currencyItems);
+
+        return currencyPB;
+    }
+
+    private static HashMap<String, BigDecimal> getCurrenciesOfBankInHashMap(List<JsonPB> currencies) {
+        HashMap<String, BigDecimal> currencyMap = new HashMap<>();
+        for (Currency currency: Currency.values()) {
+            List<BigDecimal> temp1 = getCurrenciesOfBank(currency, currencies);
+            for (int j = 0; j < buy_sale.size(); j++) {
+                currencyMap.put(currency + buy_sale.get(j),
+                        temp1.get(j));
+            }
+        }
+        return currencyMap;
+    }
+
+    private static List<BigDecimal> getCurrenciesOfBank(Currency currency, List<JsonPB> currencies) {
+        List<BigDecimal> res = new ArrayList<>();
+        res.add(BigDecimal.valueOf(currencies.stream()
                 .filter(it -> it.getCcy() == currency)
-                .filter(it -> it.getBase_ccy() == Currency.UAH)
-                .map(CurrencyItem::getBuy)
-                .findFirst()
-                .orElseThrow();
+                .map(JsonPB::getBuy)
+                .collect(Collectors.toList()).get(0)));
+        res.add(BigDecimal.valueOf(currencies.stream()
+                .filter(it -> it.getCcy() == currency)
+                .map(JsonPB::getSale)
+                .collect(Collectors.toList()).get(0)));
+        return res;
+
     }
 
 }
