@@ -38,6 +38,7 @@ public enum ChatPlace {
         ChatPlace goToCurrencies(){
             return ChatPlace.CURRENCIES;
         }
+        @Override
         ChatPlace goToTimeOfNotification(){
             return ChatPlace.TIME_OF_NOTIFICATION;
         }

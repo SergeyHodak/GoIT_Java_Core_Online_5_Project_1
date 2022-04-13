@@ -13,18 +13,22 @@ public class ChatManagerTests {
             System.out.println("e.getStackTrace() = " + e.getStackTrace());     //наприклад з головного меню в старт потрапити неможливо
         }                                                                       //
         System.out.println("chatManager.toString( expected privat and main menu) = " + chatManager.toString());
-//        try {
-//            chatManager.setPlaceToStart();
-//        } catch (OperationNotSupportedException e){
-//            System.out.println("Impossible to set position such way");//Але якщо ми пробуємо зробити недопустимий перехід то джава кидає нам ексепшин, отже помилитись з недопустимим переходом неможливо
-//        }
-        // Від непередбачуваної зміни позиції код захищено, це не спрацює
-//        System.out.println("chatManager.toString( expected privat and main menu) = " + chatManager.toString());
-//        try {
-//            chatManager.setChatPlace(ChatPlace.START);
-//        } catch (OperationNotSupportedException e){
-//            System.out.println("Impossible to set position such way");//Але якщо ми пробуємо зробити недопустимий перехід то джава кидає нам ексепшин, отже помилитись з недопустимим переходом неможливо
-//        }
-
+        /**
+        * try {
+        *     chatManager.setPlaceToStart();
+        * } catch (OperationNotSupportedException e){
+        *     System.out.println("Impossible to set position such way");
+        *     //Але якщо ми пробуємо зробити недопустимий перехід то джава кидає нам ексепшин, отже помилитись з
+        *     //недопустимим переходом неможливо
+        * }
+        * // Від непередбачуваної зміни позиції код захищено, це не спрацює
+        * System.out.println("chatManager.toString(expected privat and main menu) = " + chatManager.toString());
+        * try {
+        *     chatManager.setChatPlace(ChatPlace.START);
+        * } catch (OperationNotSupportedException e){
+        *     System.out.println("Impossible to set position such way");//Але якщо ми пробуємо зробити недопустимий
+        *     //перехід то джава кидає нам ексепшин, отже помилитись з недопустимим переходом неможливо
+        * }
+        */
     }
 }

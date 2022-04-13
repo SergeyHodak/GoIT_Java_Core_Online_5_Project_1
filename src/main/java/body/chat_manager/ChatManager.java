@@ -1,15 +1,11 @@
 package body.chat_manager;
 
 import lombok.Data;
-
 import javax.naming.OperationNotSupportedException;
 
 @Data
 public class ChatManager {
-    public final ChatSettings chatSettings; // Тут доцільно використати паблік файнал.
-    // Всередині класу є свої геттери/сеттери.
-    //Змінити щось як не передбачено ChatSettings з зовні неможливо
-    //Змінити інстанс chatSettings з зовні неможливо
+    public final ChatSettings chatSettings;
     private ChatPlace chatPlace;
 
     public ChatManager(ChatPlace chatPlace){
