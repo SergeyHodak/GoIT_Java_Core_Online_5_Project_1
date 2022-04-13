@@ -5,7 +5,6 @@ import body.bank.CurrencyService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -39,7 +38,6 @@ public class Monobank implements CurrencyService {
         HttpResponse<String> response = sendRequest();
         stringOfCurrencies = String.valueOf(response.body());
 
-
         Type typeToken = TypeToken
                 .getParameterized(List.class, JsonMB.class)
                 .getType();
@@ -59,7 +57,6 @@ public class Monobank implements CurrencyService {
                         temp1.get(j));
             }
         }
-
         return currencyMap;
     }
 
@@ -73,8 +70,6 @@ public class Monobank implements CurrencyService {
                 .filter(it -> it.getCurrencyCodeA() == currency)
                 .map(JsonMB::getRateSell)
                 .collect(Collectors.toList()).get(0)));
-
         return res;
-
     }
 }

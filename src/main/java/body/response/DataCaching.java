@@ -19,69 +19,62 @@ public class DataCaching implements Runnable {
         return instance;
     }
 
-
     private static class CurrencyStorage{
-
         HashMap<String, SettingsCurrency> currenciesNBU = new HashMap<>();
         HashMap<String, SettingsCurrency> currenciesPB = new HashMap<>();
         HashMap<String, SettingsCurrency> currenciesMono = new HashMap<>();
-
     }
 
     private void parseCurrencyResponse(HashMap<String, BigDecimal> curMap) throws Exception {
 
         for (Map.Entry<String, BigDecimal> entry : curMap.entrySet()) {
-                String key = entry.getKey();
-                BigDecimal value = entry.getValue();
-                SettingsCurrency currency;
+            String key = entry.getKey();
+            BigDecimal value = entry.getValue();
+            SettingsCurrency currency;
             String abbr = key.substring(0,3);
-                if (!(abbr.equals("EUR")||abbr.equals("USD"))){
-                    throw new Exception("Invalid currency name in currency rate '" + key + "'");
-                }
-                String oper = key.substring(key.length()-3);
-                if (!(oper.equals("Buy")||(key.substring(key.length()-4)).equals("Sale"))){
-                    throw new Exception("Invalid operation name in currency rate '" + key + "'");
-                }
-                String bank = key.substring(3,5);
+            if (!(abbr.equals("EUR")||abbr.equals("USD"))){
+                throw new Exception("Invalid currency name in currency rate '" + key + "'");
+            }
+            String oper = key.substring(key.length()-3);
+            if (!(oper.equals("Buy")||(key.substring(key.length()-4)).equals("Sale"))){
+                throw new Exception("Invalid operation name in currency rate '" + key + "'");
+            }
+            String bank = key.substring(3,5);
 
-                switch (bank){
-                    case "nb":
-                        if (currencyStorage.currenciesNBU.containsKey(abbr)) {
-                            currency = currencyStorage.currenciesNBU.get(abbr);
-                        } else
-                            currency = new SettingsCurrency("NBU", abbr);
-                        currencyStorage.currenciesNBU.put(String.valueOf(abbr), currency);
-                        break;
-                    case "mo":
-                        if (currencyStorage.currenciesMono.containsKey(abbr)) {
-                            currency = currencyStorage.currenciesMono.get(abbr);
-                        } else
-                            currency = new SettingsCurrency("Mono", abbr);
-                        currencyStorage.currenciesMono.put(String.valueOf(abbr), currency);
-                        break;
-                    case "pb":
-                        if (currencyStorage.currenciesPB.containsKey(abbr)) {
-                            currency = currencyStorage.currenciesPB.get(abbr);
-                        } else
-                            currency = new SettingsCurrency("PB", abbr);
-                        currencyStorage.currenciesPB.put(String.valueOf(abbr), currency);
-                        break;
-                    default:
-                        throw new Exception("Invalid bank name in currency rate '" + key + "'");
-                }
+            switch (bank){
+                case "nb":
+                    if (currencyStorage.currenciesNBU.containsKey(abbr)) {
+                        currency = currencyStorage.currenciesNBU.get(abbr);
+                    } else
+                        currency = new SettingsCurrency("NBU", abbr);
+                    currencyStorage.currenciesNBU.put(String.valueOf(abbr), currency);
+                    break;
+                case "mo":
+                    if (currencyStorage.currenciesMono.containsKey(abbr)) {
+                        currency = currencyStorage.currenciesMono.get(abbr);
+                    } else
+                        currency = new SettingsCurrency("Mono", abbr);
+                    currencyStorage.currenciesMono.put(String.valueOf(abbr), currency);
+                    break;
+                case "pb":
+                    if (currencyStorage.currenciesPB.containsKey(abbr)) {
+                        currency = currencyStorage.currenciesPB.get(abbr);
+                    } else
+                        currency = new SettingsCurrency("PB", abbr);
+                    currencyStorage.currenciesPB.put(String.valueOf(abbr), currency);
+                    break;
+                default:
+                    throw new Exception("Invalid bank name in currency rate '" + key + "'");
+            }
 
-                if (oper.equals("Buy")){
-                    currency.setRateBuy(value);
-                } else {
-                    currency.setRateSell(value);
-                }
-
+            if (oper.equals("Buy")){
+                currency.setRateBuy(value);
+            } else {
+                currency.setRateSell(value);
+            }
         }
-
     }
 
-    // «апрос всех валют дл€ одного банка
-    // key = currency Name, value = Currency
     public HashMap<String, SettingsCurrency> getCurrenciesByBank(String bank) throws Exception {
         switch (bank){
             case "NBU":
@@ -93,10 +86,8 @@ public class DataCaching implements Runnable {
             default:
                 throw new Exception("Invalid bank name '" + bank + "', must be one of NBU, PB, Mono.");
         }
-
     }
 
-    // «апрос конкретной валюты дл€ конкретного банка
     public SettingsCurrency getCurrencyByBank(String abbr, String bank) throws Exception {
         if (!(abbr.equals("EUR")||abbr.equals("USD"))){
             throw new Exception("Invalid currency name '" + abbr + "', must be one of EUR, PB.");
@@ -111,11 +102,8 @@ public class DataCaching implements Runnable {
             default:
                 throw new Exception("Invalid bank name '" + bank + "', must be one of NBU, PB, Mono.");
         }
-
     }
 
-    // «апрос конкретной валюты дл€ всех банков
-    // key = bankName, value = Currency
     public static HashMap<String, SettingsCurrency> getCurrencyForAllBank(String abbr) throws Exception {
         if (!(abbr.equals("EUR")||abbr.equals("USD"))){
             throw new Exception("Invalid currency name '" + abbr + "', must be one of EUR, PB.");
@@ -146,5 +134,4 @@ public class DataCaching implements Runnable {
             } while (true);
         }
     }
-
 }

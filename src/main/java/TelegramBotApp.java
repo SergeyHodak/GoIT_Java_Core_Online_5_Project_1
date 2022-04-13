@@ -5,5 +5,4 @@ public class TelegramBotApp {
         BotInitialization botService = new BotInitialization();
 
     }
-
 }

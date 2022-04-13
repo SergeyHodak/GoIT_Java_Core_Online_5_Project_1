@@ -5,7 +5,6 @@ import body.bank.CurrencyService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -38,7 +37,6 @@ public class PrivatBank implements CurrencyService {
         String stringOfCurrencies = "";
         HttpResponse<String> response = sendRequest();
         stringOfCurrencies = String.valueOf(response.body());
-
 
         Type typeToken = TypeToken
                 .getParameterized(List.class, JsonPB.class)
@@ -73,7 +71,5 @@ public class PrivatBank implements CurrencyService {
                 .map(JsonPB::getSale)
                 .collect(Collectors.toList()).get(0)));
         return res;
-
     }
-
 }

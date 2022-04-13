@@ -4,7 +4,6 @@ import body.bank.CurrencyService;
 import body.bank.monobank.Monobank;
 import body.bank.nbu.NBU;
 import body.bank.pb.PrivatBank;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -32,5 +31,4 @@ public class BankResponse {
         }
         return currency;
     }
-
 }

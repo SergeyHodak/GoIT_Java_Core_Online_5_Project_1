@@ -5,7 +5,6 @@ import body.bank.CurrencyService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -33,29 +32,10 @@ public class NBU implements CurrencyService {
         return response;
     }
 
-    //    @Override
-//    public float[] getBuy(Currency[] currency) throws IllegalStateException {
-//        float[] result = new float[currency.length];
-//        for (int i = 0; i < currency.length; i++) {
-//            for (JsonNBU nbu : currencies) {
-//                if (Objects.equals(nbu.getCc(), currency[i].name())) {
-//                    result[i] = nbu.getRate();
-//                    break;
-//                }
-//            }
-//        }
-//        return result;
-//    }
-//
-//    @Override
-//    public float[] getSale(Currency[] currency) {
-//        return getBuy(currency);
-//    }
     public HashMap<String, BigDecimal> getRate() throws IOException, InterruptedException {
         String stringOfCurrencies = "";
         HttpResponse<String> response = sendRequest();
         stringOfCurrencies = String.valueOf(response.body());
-
 
         Type typeToken = TypeToken
                 .getParameterized(List.class, JsonNBU.class)
@@ -90,6 +70,5 @@ public class NBU implements CurrencyService {
                 .map(JsonNBU::getRate)
                 .collect(Collectors.toList()).get(0)));
         return res;
-
     }
 }
