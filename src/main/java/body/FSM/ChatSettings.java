@@ -17,7 +17,7 @@ public class ChatSettings {
     public ChatSettings(){
         isUsdNeed = true;
         isEurNeed = true;
-        bank = "monobank";
+        bank = "NBU";
         quantityOfSignsAfterDot = 2;
         doNotify = true;
         notificationHour = 9;

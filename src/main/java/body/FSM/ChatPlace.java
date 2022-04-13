@@ -1,25 +1,13 @@
-package body.chat_manager;
+package body.FSM;
 
 import javax.naming.OperationNotSupportedException;
 
 public enum ChatPlace {
-    START {
-        @Override
-        ChatPlace goToMainMenu(){
-            return ChatPlace.MAIN_MENU;
-        }
-    },
     MAIN_MENU {
-        @Override
-        ChatPlace goToGetInfo(){
-            return ChatPlace.GET_INFO;
-        }
         @Override
         ChatPlace goToSettings(){
             return ChatPlace.SETTINGS;
         }
-    },
-    GET_INFO {
         @Override
         ChatPlace goToMainMenu(){
             return ChatPlace.MAIN_MENU;
@@ -71,13 +59,7 @@ public enum ChatPlace {
             return ChatPlace.SETTINGS;
         }
     };
-    ChatPlace goToStart()throws OperationNotSupportedException{
-        throw new OperationNotSupportedException();
-    }
     ChatPlace goToMainMenu()throws OperationNotSupportedException{
-        throw new OperationNotSupportedException();
-    }
-    ChatPlace goToGetInfo()throws OperationNotSupportedException{
         throw new OperationNotSupportedException();
     }
     ChatPlace goToSettings()throws OperationNotSupportedException{
