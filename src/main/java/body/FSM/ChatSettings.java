@@ -1,4 +1,4 @@
-package body.chat_manager;
+package body.FSM;
 
 import lombok.Data;
 
