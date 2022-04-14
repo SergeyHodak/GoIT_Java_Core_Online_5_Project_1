@@ -10,7 +10,6 @@ import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingC
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.Map;
@@ -20,7 +19,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-
 public class BotConnection extends TelegramLongPollingCommandBot {
     private Map<String, FSM> stateMashines;
 
@@ -39,8 +37,6 @@ public class BotConnection extends TelegramLongPollingCommandBot {
             } catch (TelegramApiException e) {
                 System.out.println();
             }
-
-
         });
     }
 
@@ -59,7 +55,6 @@ public class BotConnection extends TelegramLongPollingCommandBot {
             stateMashines.put(chatId, fsm);
         }
         stateMashines.get(chatId).handle(update);
-
     }
 
     @Override
@@ -93,7 +88,6 @@ public class BotConnection extends TelegramLongPollingCommandBot {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    // there is needed to be called method getInfo which gives String text
 
                     String message = "it is info send at exactly default time. if only was pressed one of button \"setting or get infp\"";
                     SendMessage sendMessage = new SendMessage();
@@ -105,10 +99,8 @@ public class BotConnection extends TelegramLongPollingCommandBot {
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
-
                 }
             }, c.getTime(), 86400000); // it is 24h
-
         }
     }
 
