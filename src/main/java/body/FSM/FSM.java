@@ -1,9 +1,12 @@
 package body.FSM;
 
+import lombok.Data;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
 import javax.naming.OperationNotSupportedException;
 import java.util.HashMap;
 
+@Data
 public class FSM {
     private StateMachineListener listener;
     public final ChatSettings chatSettings;

@@ -20,7 +20,7 @@ public class ChatSettings {
         bank = "monobank";
         quantityOfSignsAfterDot = 2;
         doNotify = true;
-        notificationHour = 9;
+        notificationHour = 22;
     }
     @Override
     public String toString(){
