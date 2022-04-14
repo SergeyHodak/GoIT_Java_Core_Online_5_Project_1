@@ -195,7 +195,7 @@ public class FSM {
             case "NBU":
                 bankString = "НБУ";
                 break;
-            case "Mono":
+            case "Monobank":
                 bankString = "МоноБанк";
                 break;
             case "PB":

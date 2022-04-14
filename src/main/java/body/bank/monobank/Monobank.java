@@ -53,7 +53,7 @@ public class Monobank implements CurrencyService {
         for (Currency currency : Currency.values()) {
             List<BigDecimal> temp1 = getCurrenciesOfBank(new CodCurrency().get(currency), currencies);
             for (int j = 0; j < buy_sale.size(); j++) {
-                currencyMap.put(currency + "mono" + buy_sale.get(j),
+                currencyMap.put(currency + "mo" + buy_sale.get(j),
                         temp1.get(j));
             }
         }
