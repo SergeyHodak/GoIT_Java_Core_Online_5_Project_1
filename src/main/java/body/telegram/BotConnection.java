@@ -5,6 +5,8 @@ import body.FSM.FSM;
 import body.telegram.command.StartCommand;
 import body.telegram.keyboardAction.KeyboardActions;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.SneakyThrows;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -12,6 +14,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class BotConnection extends TelegramLongPollingCommandBot {
     private Map<String, FSM> stateMashines;
@@ -40,6 +43,7 @@ public class BotConnection extends TelegramLongPollingCommandBot {
     }
 
 
+    @SneakyThrows
     @Override
     public void processNonCommandUpdate(Update update) {
         String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
@@ -58,10 +62,10 @@ public class BotConnection extends TelegramLongPollingCommandBot {
         return ConstantData.BOT_TOKEN;
     }
 
-    private class MessageListener implements StateMachineListener {
+    private static class MessageListener implements StateMachineListener {
         private String chatId;
         private KeyboardActions keyboard;
-        public MessageListener(String chatId) {
+        public MessageListener(String chatId) throws Exception {
             this.chatId = chatId;
             keyboard = new KeyboardActions(chatId);
         }

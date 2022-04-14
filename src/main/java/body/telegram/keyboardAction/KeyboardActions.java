@@ -1,7 +1,7 @@
 package body.telegram.keyboardAction;
 
+import body.FSM.FSM;
 import body.telegram.BotConnection;
-
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -15,14 +15,13 @@ import java.util.List;
 
 public class KeyboardActions extends BotConnection {
     private String chatId;
-
-    public KeyboardActions(String chatId) {
+    FSM fsm = new FSM();
+    public KeyboardActions(String chatId) throws Exception {
         this.chatId = chatId;
     }
 
     public void sendStart() {
         StringBuilder messageBuilder = new StringBuilder();
-
         messageBuilder.append("Вітаю \uD83D\uDC4B\uD83C\uDFFB ").append("\n");
         messageBuilder.append("даний бот допоможе відслідковувати актуальні курси валют");
 
@@ -104,13 +103,22 @@ public class KeyboardActions extends BotConnection {
     public void sendGetCurrency() {
         SendMessage answer = new SendMessage();
         answer.setChatId(chatId);
-        answer.setText("Вот тобі і курс!!!");
+
+        String defaultInfoMessage = null;
+        try {
+            defaultInfoMessage = fsm.getInfo();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        answer.setText(defaultInfoMessage);
 
         try {
             execute(answer);
         } catch (TelegramApiException e) {
             System.out.println("FUCK error" + e);
         }
+
+
     }
 
     public void sendCountSignMenu() {
