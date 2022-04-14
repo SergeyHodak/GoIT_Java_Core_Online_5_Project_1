@@ -1,9 +1,10 @@
 package body.FSM;
 
+import lombok.Data;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import javax.naming.OperationNotSupportedException;
 import java.util.HashMap;
-
+@Data
 public class FSM {
     private StateMachineListener listener;
     public final ChatSettings chatSettings;
@@ -28,6 +29,7 @@ public class FSM {
         fsmChatPlace.put(ChatPlace.QUANTITY_OF_DIGITS_AFTER_DOT, this::stateCountSignAfterDot);
         fsmChatPlace.put(ChatPlace.TIME_OF_NOTIFICATION, this::stateTimeNotific);
         fsmChatPlace.put(ChatPlace.CURRENCIES, this::stateCurrencies);
+
     }
 
     private String message;
@@ -37,9 +39,11 @@ public class FSM {
         this.update = update;
         message = update.getCallbackQuery().getData();
         fsmChatPlace.get(chatPlace).handler();
+
     }
 
     void stateMainMenu() {
+        listener.onMessageReceived();
         switch (message) {
             case ("settings"):
                 settings();
