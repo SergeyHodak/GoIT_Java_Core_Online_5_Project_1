@@ -77,8 +77,19 @@ public class FSM {
     }
 
     void stateBanks() {
-        chatSettings.setBank(message);
-        settings();
+
+        switch (message){
+            case "nbu":
+            case"privat":
+            case "monobank":
+                chatSettings.setBank(message);
+                listener.getKeyBoard().sendBankMenu(update, chatSettings.getBank());
+                break;
+            case ("back"):
+                settings();
+                break;
+        }
+
     }
 
 //    void stateCountSignAfterDot() {
@@ -151,7 +162,7 @@ public class FSM {
     }
 
     void setBank() {
-        listener.getKeyBoard().sendBankMenu();
+        listener.getKeyBoard().sendBankMenu(update, chatSettings.getBank());
 
         try {
             chatPlace = chatPlace.goToBanks();

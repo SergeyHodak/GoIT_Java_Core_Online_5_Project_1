@@ -205,7 +205,7 @@ public class KeyboardActions extends BotConnection {
     }
 
 
-    public void sendBankMenu() {
+    public void sendBankMenuV1() {
         SendMessage answer = new SendMessage();
         answer.setChatId(chatId);
         answer.setText(convert("Виберіть банк з якого хочете отримувати данні"));
@@ -224,6 +224,71 @@ public class KeyboardActions extends BotConnection {
             execute(answer);
         } catch (TelegramApiException e) {
             System.out.println("FUCK error" + e);
+        }
+    }
+    public void sendBankMenu(Update u, String bank) {
+        CallbackQuery callbackquery = u.getCallbackQuery();
+
+        EditMessageText editMarkup = new EditMessageText();
+
+        editMarkup.setChatId(chatId);
+        editMarkup.setInlineMessageId(callbackquery.getInlineMessageId());
+        editMarkup.setText(convert("Виберіть банк з якого хочете отримувати данні"));
+        editMarkup.enableMarkdown(true);
+        editMarkup.setMessageId(callbackquery.getMessage().getMessageId());
+
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInlineFirst = new ArrayList<>();
+        List<InlineKeyboardButton> rowInlineSecond = new ArrayList<>();
+        List<InlineKeyboardButton> rowInlineThree = new ArrayList<>();
+        List<InlineKeyboardButton> rowInlineFour = new ArrayList<>();
+        InlineKeyboardButton but1 = new InlineKeyboardButton();
+        but1.setCallbackData("privat");
+        if (bank.equals("privat")) {
+            but1.setText("\u2705 Приват");
+        } else {
+            but1.setText("Приват");
+        }
+
+        InlineKeyboardButton but2 = new InlineKeyboardButton("Моно");
+        but2.setCallbackData("monobank");
+
+        if (bank.equals("monobank")) {
+            but2.setText("\u2705 Моно");
+        } else {
+            but2.setText("Моно");
+        }
+        InlineKeyboardButton but3 = new InlineKeyboardButton("4");
+        but3.setCallbackData("nbu");
+
+        if (bank.equals("nbu")) {
+            but3.setText("\u2705 НБУ");
+        } else {
+            but3.setText("НБУ");
+        }
+        InlineKeyboardButton but4 = new InlineKeyboardButton(convert("Назад"));
+        but4.setCallbackData("back");
+        rowInlineFirst.add(but1);
+        rowInlineSecond.add(but2);
+        rowInlineThree.add(but3);
+        rowInlineFour.add(but4);
+
+
+        rowsInline.add(rowInlineFirst);
+        rowsInline.add(rowInlineSecond);
+        rowsInline.add(rowInlineThree);
+        rowsInline.add(rowInlineFour);
+
+
+        markupInline.setKeyboard(rowsInline);
+
+        editMarkup.setReplyMarkup(markupInline);
+        try {
+            execute(editMarkup);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 
