@@ -193,35 +193,35 @@ public class FSM {
         String bankString;
         switch (bank) {
             case "NBU":
-                bankString = "НБУ";
+                bankString = "РќР‘РЈ";
                 break;
             case "Monobank":
-                bankString = "МоноБанк";
+                bankString = "РњРѕРЅРѕР±Р°РЅРє";
                 break;
             case "PB":
-                bankString = "ПриватБанк";
+                bankString = "РџСЂРёРІР°С‚ Р±Р°РЅРє";
                 break;
             default:
                 throw new Exception("Invalid bank name '" + bank + "', must be one of NBU, PB, Mono.");
         }
         if (!usd && !eur) {
-            result.append("Не выбрана валюта оповещения\n\n");
+            result.append("РќРµ РІРёР±СЂР°РЅР° РІР°Р»СЋС‚Р° СЃРїРѕРІС–С‰РµРЅРЅСЏ\n\n");
         } else {
-            result.append("Курс валют в ")
+            result.append("РљСѓСЂСЃ РІР°Р»СЋС‚ РІ ")
                     .append(bankString)
                     .append(":\n\n");
         }
         if (usd) {
-            result.append("USD/UAH\nПокупка: ");
+            result.append("USD/UAH\nРљСѓРїС–РІР»СЏ: ");
             result.append(currenciesData.get("USD").getRateBuy().setScale(rounding, RoundingMode.HALF_UP));
-            result.append("\nПродажа: ");
+            result.append("\nРџСЂРѕРґР°Р¶: ");
             result.append(currenciesData.get("USD").getRateSell().setScale(rounding, RoundingMode.HALF_UP));
             result.append("\n\n");
         }
         if (eur) {
-            result.append("EUR/UAH\nПокупка: ");
+            result.append("EUR/UAH\nРљСѓРїС–РІР»СЏ: ");
             result.append(currenciesData.get("EUR").getRateBuy().setScale(rounding, RoundingMode.HALF_UP));
-            result.append("\nПродажа: ");
+            result.append("\nРџСЂРѕРґР°Р¶: ");
             result.append(currenciesData.get("EUR").getRateSell().setScale(rounding, RoundingMode.HALF_UP));
             result.append("\n\n");
         }
