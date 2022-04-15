@@ -117,27 +117,93 @@ public class KeyboardActions extends BotConnection {
         }
     }
 
-    public void sendCountSignMenu() {
-        SendMessage answer = new SendMessage();
-        answer.setChatId(chatId);
-        answer.setText(convert("Виберіть кількість знаків після коми"));
+//    public void sendCountSignMenu() {
+//        SendMessage answer = new SendMessage();
+//        answer.setChatId(chatId);
+//        answer.setText(convert("Виберіть кількість знаків після коми"));
+//        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+//
+//        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+//
+//        rowsInline.add(createRowKeyboardWith1Button("2","2"));
+//        rowsInline.add(createRowKeyboardWith1Button("3","3"));
+//        rowsInline.add(createRowKeyboardWith1Button("4","4"));
+//
+//        markupInline.setKeyboard(rowsInline);
+//
+//        answer.setReplyMarkup(markupInline);
+//        try {
+//            execute(answer);
+//        } catch (TelegramApiException e) {
+//            System.out.println("FUCK error" + e);
+//        }
+//    }
+    public void sendCountSignMenuV2(Update u, int quantityOfSignsAfterDot) {
+        CallbackQuery callbackquery = u.getCallbackQuery();
+
+        EditMessageText editMarkup = new EditMessageText();
+
+        editMarkup.setChatId(chatId);
+        editMarkup.setInlineMessageId(callbackquery.getInlineMessageId());
+        editMarkup.setText(convert("Виберіть кількість знаків після коми"));
+        editMarkup.enableMarkdown(true);
+        editMarkup.setMessageId(callbackquery.getMessage().getMessageId());
+
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
 
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInlineFirst = new ArrayList<>();
+        List<InlineKeyboardButton> rowInlineSecond = new ArrayList<>();
+        List<InlineKeyboardButton> rowInlineThree = new ArrayList<>();
+        List<InlineKeyboardButton> rowInlineFour = new ArrayList<>();
+        InlineKeyboardButton but1 = new InlineKeyboardButton();
+        but1.setCallbackData("2");
+        if (quantityOfSignsAfterDot == 2) {
+            but1.setText("\u2705 2");
+        } else {
+            but1.setText("2");
+        }
 
-        rowsInline.add(createRowKeyboardWith1Button("2","2"));
-        rowsInline.add(createRowKeyboardWith1Button("3","3"));
-        rowsInline.add(createRowKeyboardWith1Button("4","4"));
+        InlineKeyboardButton but2 = new InlineKeyboardButton("3");
+        but2.setCallbackData("3");
+
+        if (quantityOfSignsAfterDot == 3) {
+            but2.setText("\u2705 3");
+        } else {
+            but2.setText("3");
+        }
+        InlineKeyboardButton but3 = new InlineKeyboardButton("4");
+        but3.setCallbackData("4");
+
+        if (quantityOfSignsAfterDot == 4) {
+            but3.setText("\u2705 4");
+        } else {
+            but3.setText("4");
+        }
+        InlineKeyboardButton but4 = new InlineKeyboardButton(convert("Назад"));
+        but4.setCallbackData("back");
+        rowInlineFirst.add(but1);
+        rowInlineSecond.add(but2);
+        rowInlineThree.add(but3);
+        rowInlineFour.add(but4);
+
+
+        rowsInline.add(rowInlineFirst);
+        rowsInline.add(rowInlineSecond);
+        rowsInline.add(rowInlineThree);
+        rowsInline.add(rowInlineFour);
+
 
         markupInline.setKeyboard(rowsInline);
 
-        answer.setReplyMarkup(markupInline);
+        editMarkup.setReplyMarkup(markupInline);
         try {
-            execute(answer);
+            execute(editMarkup);
         } catch (TelegramApiException e) {
-            System.out.println("FUCK error" + e);
+            e.printStackTrace();
         }
     }
+
 
     public void sendBankMenu() {
         SendMessage answer = new SendMessage();

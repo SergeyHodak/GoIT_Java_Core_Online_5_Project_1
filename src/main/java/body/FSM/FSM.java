@@ -81,14 +81,29 @@ public class FSM {
         settings();
     }
 
-    void stateCountSignAfterDot() {
-        chatSettings.setQuantityOfSignsAfterDot(Integer.parseInt(message));
-        settings();
-    }
+//    void stateCountSignAfterDot() {
+//        chatSettings.setQuantityOfSignsAfterDot(Integer.parseInt(message));
+//        settings();
+//    }
 
     void stateTimeNotific() {
         chatSettings.setNotificationHour(Integer.parseInt(message));
         settings();
+    }
+    void stateCountSignAfterDot(){
+
+        switch (message) {
+            case "2":
+            case "3":
+            case "4":
+                chatSettings.setQuantityOfSignsAfterDot(Integer.parseInt(message));
+                listener.getKeyBoard().sendCountSignMenuV2(update, chatSettings.getQuantityOfSignsAfterDot());
+                break;
+            case ("back"):
+                settings();
+                break;
+        }
+
     }
 
     void stateCurrencies() {
@@ -123,8 +138,11 @@ public class FSM {
         setMainMenu();
     }
 
+
+
+
     void setCountSign() {
-        listener.getKeyBoard().sendCountSignMenu();
+        listener.getKeyBoard().sendCountSignMenuV2(update, chatSettings.getQuantityOfSignsAfterDot());
         try {
             chatPlace = chatPlace.goToQuantityOfDigitsAfterDot();
         } catch (OperationNotSupportedException e) {
