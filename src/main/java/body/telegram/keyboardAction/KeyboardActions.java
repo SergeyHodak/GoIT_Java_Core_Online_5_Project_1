@@ -1,5 +1,6 @@
 package body.telegram.keyboardAction;
 
+import body.FSM.FSM;
 import body.telegram.BotConnection;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -14,8 +15,8 @@ import java.util.List;
 
 public class KeyboardActions extends BotConnection {
     private String chatId;
-
-    public KeyboardActions(String chatId) {
+    FSM fsm = new FSM();
+    public KeyboardActions(String chatId) throws Exception {
         this.chatId = chatId;
     }
 
@@ -100,7 +101,14 @@ public class KeyboardActions extends BotConnection {
     public void sendGetCurrency() {
         SendMessage answer = new SendMessage();
         answer.setChatId(chatId);
-        answer.setText(convert("От тобі і курс!!!"));
+
+        String defaultInfoMessage = null;
+        try {
+            defaultInfoMessage = fsm.getInfo();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        answer.setText(defaultInfoMessage);
 
         try {
             execute(answer);

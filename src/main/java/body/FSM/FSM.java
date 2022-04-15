@@ -1,9 +1,15 @@
 package body.FSM;
 
+import lombok.Data;
+import body.response.DataCaching;
+import body.response.SettingsCurrency;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import javax.naming.OperationNotSupportedException;
+import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
+@Data
 public class FSM {
     private StateMachineListener listener;
     public final ChatSettings chatSettings;
@@ -13,7 +19,7 @@ public class FSM {
     }
 
     private interface StateHandler {
-        void handler();
+        void handler() throws Exception;
     }
 
     private HashMap<ChatPlace, StateHandler> fsmChatPlace = new HashMap<>();
@@ -33,13 +39,13 @@ public class FSM {
     private String message;
     private Update update;
 
-    public void handle(Update update) {
+    public void handle(Update update) throws Exception {
         this.update = update;
         message = update.getCallbackQuery().getData();
         fsmChatPlace.get(chatPlace).handler();
     }
 
-    void stateMainMenu() {
+    void stateMainMenu() throws Exception {
         switch (message) {
             case ("settings"):
                 settings();
@@ -112,7 +118,7 @@ public class FSM {
         }
     }
 
-    void getInfoAbCurrency() {
+    void getInfoAbCurrency() throws Exception {
         listener.getKeyBoard().sendGetCurrency();
         setMainMenu();
     }
@@ -164,5 +170,63 @@ public class FSM {
         } catch (OperationNotSupportedException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getInfo() throws Exception {
+        String bank = chatSettings.getBank();
+        boolean usd = chatSettings.isUsdNeed();
+        boolean eur = chatSettings.isEurNeed();
+        int rounding = chatSettings.getQuantityOfSignsAfterDot();
+        DataCaching data = DataCaching.getInstance();
+        HashMap<String, SettingsCurrency> currenciesData = data.getCurrenciesByBank(bank);
+        return resultStringForming(bank, usd, eur, rounding, currenciesData);
+    }
+
+    private String resultStringForming(String bank, boolean usd, boolean eur, int rounding,
+                                       HashMap<String, SettingsCurrency> currenciesData) throws Exception {
+        StringBuilder result = new StringBuilder();
+        String bankString;
+        switch (bank) {
+            case "NBU":
+                bankString = convert("НБУ");
+                break;
+            case "Monobank":
+                bankString = convert("МоноБанк");
+                break;
+            case "PB":
+                bankString = convert("ПриватБанк");
+                break;
+            default:
+                throw new Exception("Invalid bank name '" + bank + "', must be one of NBU, PB, Mono.");
+        }
+        if (!usd && !eur) {
+            result.append(convert("Не вибрана валюта сповіщення")).append("\n\n");
+        } else {
+            result.append(convert("Курс валют в "))
+                    .append(bankString)
+                    .append(":\n\n");
+        }
+        if (usd) {
+            result.append("USD/UAH\n").append(convert("Купівля: "));
+            result.append(currenciesData.get("USD").getRateBuy().setScale(rounding, RoundingMode.HALF_UP));
+            result.append("\n").append(convert("Продаж: "));
+            result.append(currenciesData.get("USD").getRateSell().setScale(rounding, RoundingMode.HALF_UP));
+            result.append("\n\n");
+        }
+        if (eur) {
+            result.append("EUR/UAH\n").append(convert("Купівля: "));
+            result.append(currenciesData.get("EUR").getRateBuy().setScale(rounding, RoundingMode.HALF_UP));
+            result.append("\n").append(convert("Продаж: "));
+            result.append(currenciesData.get("EUR").getRateSell().setScale(rounding, RoundingMode.HALF_UP));
+            result.append("\n\n");
+        }
+
+        result.deleteCharAt(result.length() - 1);
+        result.deleteCharAt(result.length() - 1);
+        return result.toString();
+    }
+
+    private String convert(String text) {
+        return new String(text.getBytes(), StandardCharsets.UTF_8);
     }
 }
