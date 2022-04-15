@@ -28,7 +28,7 @@ public class BotConnection extends TelegramLongPollingCommandBot {
         registerDefaultAction((absSender, message) -> {
             SendMessage commandUnknownMessage = new SendMessage();
             commandUnknownMessage.setChatId(String.valueOf(message.getChatId()));
-            commandUnknownMessage.setText("Відповідна команда '" + message.getText() + "' поки що невідома нашому боту)");
+            commandUnknownMessage.setText("Р’С–РґРїРѕРІС–РґРЅР° РєРѕРјР°РЅРґР° '" + message.getText() + "' РїРѕРєРё С‰Рѕ РЅРµРІС–РґРѕРјР° РЅР°С€РѕРјСѓ Р±РѕС‚Сѓ)");
             try {
                 absSender.execute(commandUnknownMessage);
             } catch (TelegramApiException e) {

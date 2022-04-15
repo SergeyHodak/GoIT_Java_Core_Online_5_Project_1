@@ -23,8 +23,8 @@ public class StartCommand extends BotCommand {
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
         StringBuilder messageBuilder = new StringBuilder();
         String userName = user.getFirstName();
-        messageBuilder.append("Вітаю \uD83D\uDC4B\uD83C\uDFFB ").append(userName).append("\n");
-        messageBuilder.append("даний бот допоможе відслідковувати актуальні курси валют");
+        messageBuilder.append("Р’С–С‚Р°СЋ \uD83D\uDC4B\uD83C\uDFFB ").append(userName).append("\n");
+        messageBuilder.append("РґР°РЅРёР№ Р±РѕС‚ РґРѕРїРѕРјРѕР¶Рµ РІС–РґСЃР»С–РґРєРѕРІСѓРІР°С‚Рё Р°РєС‚СѓР°Р»СЊРЅС– РєСѓСЂСЃРё РІР°Р»СЋС‚");
 
         SendMessage answer = new SendMessage();
 
@@ -35,10 +35,10 @@ public class StartCommand extends BotCommand {
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
 
-        InlineKeyboardButton but1 = new InlineKeyboardButton("Отримати інформацію");
+        InlineKeyboardButton but1 = new InlineKeyboardButton("РћС‚СЂРёРјР°С‚Рё С–РЅС„РѕСЂРјР°С†С–СЋ");
         but1.setCallbackData("getInfoAbCourse");
 
-        InlineKeyboardButton but2 = new InlineKeyboardButton("Налаштування");
+        InlineKeyboardButton but2 = new InlineKeyboardButton("РќР°Р»Р°С€С‚СѓРІР°РЅРЅСЏ");
 
         but2.setCallbackData("settings");
         rowInline.add(but1);

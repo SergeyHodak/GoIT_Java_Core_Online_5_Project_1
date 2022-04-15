@@ -22,8 +22,8 @@ public class KeyboardActions extends BotConnection {
 
     public void sendStart() {
         StringBuilder messageBuilder = new StringBuilder();
-        messageBuilder.append("Вітаю \uD83D\uDC4B\uD83C\uDFFB ").append("\n");
-        messageBuilder.append("даний бот допоможе відслідковувати актуальні курси валют");
+        messageBuilder.append("Р’С–С‚Р°СЋ \uD83D\uDC4B\uD83C\uDFFB ").append("\n");
+        messageBuilder.append("РґР°РЅРёР№ Р±РѕС‚ РґРѕРїРѕРјРѕР¶Рµ РІС–РґСЃР»С–РґРєРѕРІСѓРІР°С‚Рё Р°РєС‚СѓР°Р»СЊРЅС– РєСѓСЂСЃРё РІР°Р»СЋС‚");
 
         SendMessage answer = new SendMessage();
 
@@ -33,8 +33,8 @@ public class KeyboardActions extends BotConnection {
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
 
-        rowsInline.add(createRowKeyboardWith1Button("Отримати інформацію","getInfoAbCourse"));
-        rowsInline.add(createRowKeyboardWith1Button("Налаштування","settings"));
+        rowsInline.add(createRowKeyboardWith1Button("РћС‚СЂРёРјР°С‚Рё С–РЅС„РѕСЂРјР°С†С–СЋ","getInfoAbCourse"));
+        rowsInline.add(createRowKeyboardWith1Button("РќР°Р»Р°С€С‚СѓРІР°РЅРЅСЏ","settings"));
 
         markupInline.setKeyboard(rowsInline);
 
@@ -53,7 +53,7 @@ public class KeyboardActions extends BotConnection {
 
         editMarkup.setChatId(chatId);
         editMarkup.setInlineMessageId(callbackquery.getInlineMessageId());
-        editMarkup.setText("Виберіть валюту в якій ви хочете отримувати курс");
+        editMarkup.setText("Р’РёР±РµСЂС–С‚СЊ РІР°Р»СЋС‚Сѓ РІ СЏРєС–Р№ РІРё С…РѕС‡РµС‚Рµ РѕС‚СЂРёРјСѓРІР°С‚Рё РєСѓСЂСЃ");
         editMarkup.enableMarkdown(true);
         editMarkup.setMessageId(callbackquery.getMessage().getMessageId());
 
@@ -80,7 +80,7 @@ public class KeyboardActions extends BotConnection {
         } else {
             but2.setText("EUR");
         }
-        InlineKeyboardButton but3 = new InlineKeyboardButton("Назад");
+        InlineKeyboardButton but3 = new InlineKeyboardButton("РќР°Р·Р°Рґ");
         but3.setCallbackData("back");
         rowInlineFirst.add(but1);
         rowInlineSecond.add(but2);
@@ -124,7 +124,7 @@ public class KeyboardActions extends BotConnection {
     public void sendCountSignMenu() {
         SendMessage answer = new SendMessage();
         answer.setChatId(chatId);
-        answer.setText("Виберіть кількість знаків після коми");
+        answer.setText("Р’РёР±РµСЂС–С‚СЊ РєС–Р»СЊРєС–СЃС‚СЊ Р·РЅР°РєС–РІ РїС–СЃР»СЏ РєРѕРјРё");
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
 
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
@@ -146,15 +146,15 @@ public class KeyboardActions extends BotConnection {
     public void sendBankMenu() {
         SendMessage answer = new SendMessage();
         answer.setChatId(chatId);
-        answer.setText("Виберіть банк з якого хочете отримувати данні");
+        answer.setText("Р’РёР±РµСЂС–С‚СЊ Р±Р°РЅРє Р· СЏРєРѕРіРѕ С…РѕС‡РµС‚Рµ РѕС‚СЂРёРјСѓРІР°С‚Рё РґР°РЅРЅС–");
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
 
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
 
 
-        rowsInline.add(createRowKeyboardWith1Button("Приват","privat"));
-        rowsInline.add(createRowKeyboardWith1Button("Моно","monobank"));
-        rowsInline.add(createRowKeyboardWith1Button("НБУ","nbu"));
+        rowsInline.add(createRowKeyboardWith1Button("РџСЂРёРІР°С‚","privat"));
+        rowsInline.add(createRowKeyboardWith1Button("РњРѕРЅРѕ","monobank"));
+        rowsInline.add(createRowKeyboardWith1Button("РќР‘РЈ","nbu"));
 
         markupInline.setKeyboard(rowsInline);
 
@@ -209,17 +209,17 @@ public class KeyboardActions extends BotConnection {
 
         SendMessage answer = new SendMessage();
         answer.setChatId(chatId);
-        answer.setText("Налаштування");
+        answer.setText("РќР°Р»Р°С€С‚СѓРІР°РЅРЅСЏ");
 
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
 
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
 
-        rowsInline.add(createRowKeyboardWith1Button("Кількість знаків після коми","countSign"));
-        rowsInline.add(createRowKeyboardWith1Button("Банк","bank"));
-        rowsInline.add(createRowKeyboardWith1Button("Валюти","currency"));
-        rowsInline.add(createRowKeyboardWith1Button("Час оповіщення","timeNotific"));
-        rowsInline.add(createRowKeyboardWith1Button("Головна","main"));
+        rowsInline.add(createRowKeyboardWith1Button("РљС–Р»СЊРєС–СЃС‚СЊ Р·РЅР°РєС–РІ РїС–СЃР»СЏ РєРѕРјРё","countSign"));
+        rowsInline.add(createRowKeyboardWith1Button("Р‘Р°РЅРє","bank"));
+        rowsInline.add(createRowKeyboardWith1Button("Р’Р°Р»СЋС‚Рё","currency"));
+        rowsInline.add(createRowKeyboardWith1Button("Р§Р°СЃ РѕРїРѕРІС–С‰РµРЅРЅСЏ","timeNotific"));
+        rowsInline.add(createRowKeyboardWith1Button("Р“РѕР»РѕРІРЅР°","main"));
 
         markupInline.setKeyboard(rowsInline);
 
@@ -236,7 +236,7 @@ public class KeyboardActions extends BotConnection {
 
         SendMessage answer = new SendMessage();
         answer.setChatId(chatId);
-        answer.setText("Виберіть час оповіщення");
+        answer.setText("Р’РёР±РµСЂС–С‚СЊ С‡Р°СЃ РѕРїРѕРІС–С‰РµРЅРЅСЏ");
 
 
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
@@ -245,7 +245,7 @@ public class KeyboardActions extends BotConnection {
         rowsInline.add(createRowKeyboardWith3Button("9","9","10","10","11","11"));
         rowsInline.add(createRowKeyboardWith3Button("12","12","13","13","14","14"));
         rowsInline.add(createRowKeyboardWith3Button("15","15","16","16","17","17"));
-        rowsInline.add(createRowKeyboardWith2Button("18","18","Виключити оповіщення","off notific"));
+        rowsInline.add(createRowKeyboardWith2Button("18","18","Р’РёРєР»СЋС‡РёС‚Рё РѕРїРѕРІС–С‰РµРЅРЅСЏ","off notific"));
 
 
         markupInline.setKeyboard(rowsInline);
