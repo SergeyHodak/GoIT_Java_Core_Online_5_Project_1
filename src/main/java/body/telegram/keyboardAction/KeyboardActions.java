@@ -358,13 +358,34 @@ public class KeyboardActions extends BotConnection {
         rowsInline.add(createRowKeyboardWith3Button("9","9","10","10","11","11", timeSetting));
         rowsInline.add(createRowKeyboardWith3Button("12","12","13","13","14","14", timeSetting));
         rowsInline.add(createRowKeyboardWith3Button("15","15","16","16","17","17", timeSetting));
-        rowsInline.add(createRowKeyboardWith2Button("18","18",convert("Виключити оповіщення"),"off notific",timeSetting));
-
+       // rowsInline.add(createRowKeyboardWith2Button("18","18",convert("Виключити оповіщення"),"off notific",timeSetting));
         List<InlineKeyboardButton> rowInlineFour = new ArrayList<>();
-        InlineKeyboardButton but4 = new InlineKeyboardButton(convert("Назад"));
-        but4.setCallbackData("back");
-        rowInlineFour.add(but4);
+
+        InlineKeyboardButton button1 = new InlineKeyboardButton("18");
+        button1.setCallbackData("18");
+        if (timeSetting.equals("18")) {
+            button1.setText("\u2705 "+ "18");
+        } else {
+            button1.setText("18");
+        }
+        InlineKeyboardButton button2 = new InlineKeyboardButton("Виключити оповіщення");
+        button2.setCallbackData("off notific");
+        if (timeSetting.equals("off notific")) {
+            button2.setText("\u274c");
+        } else {
+            button2.setText("Викл." );
+        }
+        rowInlineFour.add(button1);
+        rowInlineFour.add(button2);
+
+        List<InlineKeyboardButton> rowInlineFive = new ArrayList<>();
+
+        InlineKeyboardButton but6 = new InlineKeyboardButton(convert("Назад"));
+        but6.setCallbackData("back");
+        rowInlineFive.add(but6);
+
         rowsInline.add(rowInlineFour);
+        rowsInline.add(rowInlineFive);
 
 
         markupInline.setKeyboard(rowsInline);
