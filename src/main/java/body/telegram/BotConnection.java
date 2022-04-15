@@ -6,6 +6,7 @@ import body.telegram.command.StartCommand;
 import body.telegram.keyboardAction.KeyboardActions;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.SneakyThrows;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -24,7 +25,6 @@ public class BotConnection extends TelegramLongPollingCommandBot {
 
     public BotConnection() {
         register(new StartCommand());
-
 
         stateMashines = new ConcurrentHashMap<>();
         registerDefaultAction((absSender, message) -> {
@@ -45,6 +45,7 @@ public class BotConnection extends TelegramLongPollingCommandBot {
         return ConstantData.BOT_NAME;
     }
 
+    @SneakyThrows
     @Override
     public void processNonCommandUpdate(Update update) {
         String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
@@ -66,7 +67,7 @@ public class BotConnection extends TelegramLongPollingCommandBot {
         private String chatId;
         private KeyboardActions keyboard;
 
-        public MessageListener(String chatId) {
+        public MessageListener(String chatId) throws Exception {
             this.chatId = chatId;
             keyboard = new KeyboardActions(chatId);
         }

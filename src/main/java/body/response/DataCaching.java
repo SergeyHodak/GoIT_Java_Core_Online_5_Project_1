@@ -79,7 +79,7 @@ public class DataCaching implements Runnable {
         switch (bank){
             case "NBU":
                 return currencyStorage.currenciesNBU;
-            case "Mono":
+            case "Monobank":
                 return currencyStorage.currenciesMono;
             case "PB":
                 return currencyStorage.currenciesPB;
@@ -95,7 +95,7 @@ public class DataCaching implements Runnable {
         switch (bank){
             case "NBU":
                 return currencyStorage.currenciesNBU.get(abbr);
-            case "Mono":
+            case "Monobank":
                 return currencyStorage.currenciesMono.get(abbr);
             case "PB":
                 return currencyStorage.currenciesPB.get(abbr);
