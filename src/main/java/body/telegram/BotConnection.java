@@ -82,7 +82,7 @@ public class BotConnection extends TelegramLongPollingCommandBot {
 
             Calendar c = Calendar.getInstance();
             c.set(Calendar.HOUR_OF_DAY, stateMashines.get(chatId).getChatSettings().getNotificationHour());
-            c.set(Calendar.MINUTE, 13);
+            c.set(Calendar.MINUTE, 00);
             c.set(Calendar.SECOND, 00);
 
             Timer timer = new Timer();
@@ -90,13 +90,15 @@ public class BotConnection extends TelegramLongPollingCommandBot {
                 @Override
                 public void run() {
 
-                    String message = "it is info send at exactly default time. if only was pressed one of button \"setting or get infp\"";
+                    String message = "getInfo method";
                     SendMessage sendMessage = new SendMessage();
                     sendMessage.setText(message);
                     sendMessage.setChatId(chatId);
 
                     try {
-                        execute(sendMessage);
+                        if(stateMashines.get(chatId).getChatSettings().isDoNotify()) {
+                            execute(sendMessage);
+                        }
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
