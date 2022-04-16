@@ -4,6 +4,7 @@ import lombok.Data;
 import body.response.DataCaching;
 import body.response.SettingsCurrency;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
 import javax.naming.OperationNotSupportedException;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
@@ -77,18 +78,49 @@ public class FSM {
     }
 
     void stateBanks() {
-        chatSettings.setBank(message);
-        settings();
-    }
 
-    void stateCountSignAfterDot() {
-        chatSettings.setQuantityOfSignsAfterDot(Integer.parseInt(message));
-        settings();
+        switch (message) {
+            case "nbu":
+            case "privat":
+            case "monobank":
+                chatSettings.setBank(message);
+                listener.getKeyBoard().sendBankMenu(update, chatSettings.getBank());
+                break;
+            case ("back"):
+                settings();
+                break;
+        }
+
     }
 
     void stateTimeNotific() {
-        chatSettings.setNotificationHour(Integer.parseInt(message));
-        settings();
+        if (message.equals("off notific")) {
+            chatSettings.setDoNotify(!chatSettings.isDoNotify());
+            listener.getKeyBoard().sendTimeMenu(update, "off notific");
+        } else
+            if (message.equals("back")) {
+            settings();
+        } else {
+            chatSettings.setNotificationHour(Integer.parseInt(message));
+            listener.getKeyBoard().sendTimeMenu(update, String.valueOf(chatSettings.getNotificationHour()));
+
+        }
+    }
+
+    void stateCountSignAfterDot() {
+
+        switch (message) {
+            case "2":
+            case "3":
+            case "4":
+                chatSettings.setQuantityOfSignsAfterDot(Integer.parseInt(message));
+                listener.getKeyBoard().sendCountSignMenu(update, chatSettings.getQuantityOfSignsAfterDot());
+                break;
+            case ("back"):
+                settings();
+                break;
+        }
+
     }
 
     void stateCurrencies() {
@@ -123,8 +155,9 @@ public class FSM {
         setMainMenu();
     }
 
+
     void setCountSign() {
-        listener.getKeyBoard().sendCountSignMenu();
+        listener.getKeyBoard().sendCountSignMenu(update, chatSettings.getQuantityOfSignsAfterDot());
         try {
             chatPlace = chatPlace.goToQuantityOfDigitsAfterDot();
         } catch (OperationNotSupportedException e) {
@@ -133,7 +166,7 @@ public class FSM {
     }
 
     void setBank() {
-        listener.getKeyBoard().sendBankMenu();
+        listener.getKeyBoard().sendBankMenu(update, chatSettings.getBank());
 
         try {
             chatPlace = chatPlace.goToBanks();
@@ -153,7 +186,12 @@ public class FSM {
     }
 
     void setTimeNotific() {
-        listener.getKeyBoard().sendTimeMenu();
+
+        if (chatSettings.isDoNotify()) {
+            listener.getKeyBoard().sendTimeMenu(update, "Виключити оповіщення");
+        } else {
+            listener.getKeyBoard().sendCountSignMenu(update, chatSettings.getNotificationHour());
+        }
 
         try {
             chatPlace = chatPlace.goToTimeOfNotification();
