@@ -1,5 +1,6 @@
 package body.telegram.command;
 
+
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StartCommand extends BotCommand {
+
     public StartCommand() {
         super("start", "With this command you can start the Bot");
     }
@@ -39,7 +41,6 @@ public class StartCommand extends BotCommand {
 
         InlineKeyboardButton but2 = new InlineKeyboardButton(convert("Налаштування"));
         but2.setCallbackData("settings");
-
         rowInline.add(but1);
         rowInline.add(but2);
 

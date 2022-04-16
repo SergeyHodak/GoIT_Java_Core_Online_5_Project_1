@@ -1,6 +1,5 @@
 package body.telegram.keyboardAction;
 
-import body.FSM.FSM;
 import body.telegram.BotConnection;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -15,7 +14,6 @@ import java.util.List;
 
 public class KeyboardActions extends BotConnection {
     private String chatId;
-    FSM fsm = new FSM();
     public KeyboardActions(String chatId) throws Exception {
         this.chatId = chatId;
     }
@@ -98,13 +96,13 @@ public class KeyboardActions extends BotConnection {
         }
     }
 
-    public void sendGetCurrency() {
+    public void sendGetCurrency(String info) {
         SendMessage answer = new SendMessage();
         answer.setChatId(chatId);
 
         String defaultInfoMessage = null;
         try {
-            defaultInfoMessage = fsm.getInfo();
+            defaultInfoMessage = info;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -113,51 +111,140 @@ public class KeyboardActions extends BotConnection {
         try {
             execute(answer);
         } catch (TelegramApiException e) {
-            System.out.println("FUCK error" + e);
+            System.out.println("error" + e);
         }
     }
 
-    public void sendCountSignMenu() {
-        SendMessage answer = new SendMessage();
-        answer.setChatId(chatId);
-        answer.setText(convert("Виберіть кількість знаків після коми"));
+
+    public void sendCountSignMenu(Update u, int quantityOfSignsAfterDot) {
+        CallbackQuery callbackquery = u.getCallbackQuery();
+
+        EditMessageText editMarkup = new EditMessageText();
+
+        editMarkup.setChatId(chatId);
+        editMarkup.setInlineMessageId(callbackquery.getInlineMessageId());
+        editMarkup.setText(convert("Виберіть кількість знаків після коми"));
+        editMarkup.enableMarkdown(true);
+        editMarkup.setMessageId(callbackquery.getMessage().getMessageId());
+
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
 
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInlineFirst = new ArrayList<>();
+        List<InlineKeyboardButton> rowInlineSecond = new ArrayList<>();
+        List<InlineKeyboardButton> rowInlineThree = new ArrayList<>();
+        List<InlineKeyboardButton> rowInlineFour = new ArrayList<>();
+        InlineKeyboardButton but1 = new InlineKeyboardButton();
+        but1.setCallbackData("2");
+        if (quantityOfSignsAfterDot == 2) {
+            but1.setText("\u2705 2");
+        } else {
+            but1.setText("2");
+        }
 
-        rowsInline.add(createRowKeyboardWith1Button("2","2"));
-        rowsInline.add(createRowKeyboardWith1Button("3","3"));
-        rowsInline.add(createRowKeyboardWith1Button("4","4"));
+        InlineKeyboardButton but2 = new InlineKeyboardButton("3");
+        but2.setCallbackData("3");
+
+        if (quantityOfSignsAfterDot == 3) {
+            but2.setText("\u2705 3");
+        } else {
+            but2.setText("3");
+        }
+        InlineKeyboardButton but3 = new InlineKeyboardButton("4");
+        but3.setCallbackData("4");
+
+        if (quantityOfSignsAfterDot == 4) {
+            but3.setText("\u2705 4");
+        } else {
+            but3.setText("4");
+        }
+        InlineKeyboardButton but4 = new InlineKeyboardButton(convert("Назад"));
+        but4.setCallbackData("back");
+        rowInlineFirst.add(but1);
+        rowInlineSecond.add(but2);
+        rowInlineThree.add(but3);
+        rowInlineFour.add(but4);
+
+
+        rowsInline.add(rowInlineFirst);
+        rowsInline.add(rowInlineSecond);
+        rowsInline.add(rowInlineThree);
+        rowsInline.add(rowInlineFour);
+
 
         markupInline.setKeyboard(rowsInline);
 
-        answer.setReplyMarkup(markupInline);
+        editMarkup.setReplyMarkup(markupInline);
         try {
-            execute(answer);
+            execute(editMarkup);
         } catch (TelegramApiException e) {
-            System.out.println("FUCK error" + e);
+            e.printStackTrace();
         }
     }
 
-    public void sendBankMenu() {
-        SendMessage answer = new SendMessage();
-        answer.setChatId(chatId);
-        answer.setText(convert("Виберіть банк з якого хочете отримувати данні"));
+    public void sendBankMenu(Update u, String bank) {
+        CallbackQuery callbackquery = u.getCallbackQuery();
+
+        EditMessageText editMarkup = new EditMessageText();
+
+        editMarkup.setChatId(chatId);
+        editMarkup.setInlineMessageId(callbackquery.getInlineMessageId());
+        editMarkup.setText(convert("Виберіть банк з якого хочете отримувати данні"));
+        editMarkup.enableMarkdown(true);
+        editMarkup.setMessageId(callbackquery.getMessage().getMessageId());
+
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
 
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInlineFirst = new ArrayList<>();
+        List<InlineKeyboardButton> rowInlineSecond = new ArrayList<>();
+        List<InlineKeyboardButton> rowInlineThree = new ArrayList<>();
+        List<InlineKeyboardButton> rowInlineFour = new ArrayList<>();
+        InlineKeyboardButton but1 = new InlineKeyboardButton();
+        but1.setCallbackData("PB");
+        if (bank.equals("PB")) {
+            but1.setText("\u2705" + convert("Приват"));
+        } else {
+            but1.setText(convert("Приват"));
+        }
 
-        rowsInline.add(createRowKeyboardWith1Button(convert("Приват"), "privat"));
-        rowsInline.add(createRowKeyboardWith1Button(convert("Моно"), "monobank"));
-        rowsInline.add(createRowKeyboardWith1Button(convert("НБУ"), "nbu"));
+        InlineKeyboardButton but2 = new InlineKeyboardButton(convert("Моно"));
+        but2.setCallbackData("Monobank");
+
+        if (bank.equals("Monobank")) {
+            but2.setText("\u2705" + convert("Моно"));
+        } else {
+            but2.setText(convert("Моно"));
+        }
+        InlineKeyboardButton but3 = new InlineKeyboardButton("4");
+        but3.setCallbackData("NBU");
+
+        if (bank.equals("NBU")) {
+            but3.setText("\u2705" + convert("НБУ"));
+        } else {
+            but3.setText(convert("НБУ"));
+        }
+        InlineKeyboardButton but4 = new InlineKeyboardButton(convert("Назад"));
+        but4.setCallbackData("back");
+        rowInlineFirst.add(but1);
+        rowInlineSecond.add(but2);
+        rowInlineThree.add(but3);
+        rowInlineFour.add(but4);
+
+
+        rowsInline.add(rowInlineFirst);
+        rowsInline.add(rowInlineSecond);
+        rowsInline.add(rowInlineThree);
+        rowsInline.add(rowInlineFour);
+
 
         markupInline.setKeyboard(rowsInline);
 
-        answer.setReplyMarkup(markupInline);
+        editMarkup.setReplyMarkup(markupInline);
         try {
-            execute(answer);
+            execute(editMarkup);
         } catch (TelegramApiException e) {
-            System.out.println("FUCK error" + e);
+            e.printStackTrace();
         }
     }
 
@@ -169,13 +256,24 @@ public class KeyboardActions extends BotConnection {
         rowInlineFirst.add(button);
         return rowInlineFirst;
     }
-    private List<InlineKeyboardButton> createRowKeyboardWith2Button(String textB1, String callbackDataB1,String textB2, String callbackDataB2) {
+    private List<InlineKeyboardButton> createRowKeyboardWith2Button(String textB1, String callbackDataB1,
+                                                                    String textB2, String callbackDataB2,String dataToCompare) {
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
 
         InlineKeyboardButton button1 = new InlineKeyboardButton(textB1);
         button1.setCallbackData(callbackDataB1);
+        if (dataToCompare.equals(callbackDataB1)) {
+            button1.setText("\u2705 "+ textB1);
+        } else {
+            button1.setText(textB1);
+        }
         InlineKeyboardButton button2 = new InlineKeyboardButton(textB2);
         button2.setCallbackData(callbackDataB2);
+        if (dataToCompare.equals(callbackDataB2)) {
+            button2.setText("\u2705 "+ textB2);
+        } else {
+            button2.setText(textB2);
+        }
 
         rowInline.add(button1);
         rowInline.add(button2);
@@ -183,14 +281,32 @@ public class KeyboardActions extends BotConnection {
         return rowInline;
     }
 
-    private List<InlineKeyboardButton> createRowKeyboardWith3Button(String textB1, String callbackDataB1,String textB2, String callbackDataB2,String textB3, String callbackDataB3) {
+    private List<InlineKeyboardButton> createRowKeyboardWith3Button(String textB1, String callbackDataB1,
+                                                                    String textB2, String callbackDataB2,
+                                                                    String textB3, String callbackDataB3,
+                                                                    String dataToCompare) {
         List<InlineKeyboardButton> rowInlineFirst = new ArrayList<>();
         InlineKeyboardButton button1 = new InlineKeyboardButton(textB1);
         button1.setCallbackData(callbackDataB1);
+        if (dataToCompare.equals(callbackDataB1)) {
+            button1.setText("\u2705 "+ textB1);
+        } else {
+            button1.setText(textB1);
+        }
         InlineKeyboardButton button2 = new InlineKeyboardButton(textB2);
         button2.setCallbackData(callbackDataB2);
+        if (dataToCompare.equals(callbackDataB2)) {
+            button2.setText("\u2705 "+ textB2);
+        } else {
+            button2.setText(textB2);
+        }
         InlineKeyboardButton button3 = new InlineKeyboardButton(textB3);
         button3.setCallbackData(callbackDataB3);
+        if (dataToCompare.equals(callbackDataB3)) {
+            button3.setText("\u2705 "+ textB3);
+        } else {
+            button3.setText(textB3);
+        }
         rowInlineFirst.add(button1);
         rowInlineFirst.add(button2);
         rowInlineFirst.add(button3);
@@ -198,6 +314,7 @@ public class KeyboardActions extends BotConnection {
     }
 
     public void sendSeetingsMenu() {
+
         SendMessage answer = new SendMessage();
         answer.setChatId(chatId);
         answer.setText(convert("Налаштування"));
@@ -219,31 +336,64 @@ public class KeyboardActions extends BotConnection {
         try {
             execute(answer);
         } catch (TelegramApiException e) {
-            System.out.println("FUCK error" + e);
+            System.out.println("error" + e);
         }
     }
 
-    public void sendTimeMenu() {
-        SendMessage answer = new SendMessage();
-        answer.setChatId(chatId);
-        answer.setText(convert("Виберіть час оповіщення"));
+    public void sendTimeMenu(Update u, String timeSetting){
+        CallbackQuery callbackquery = u.getCallbackQuery();
+
+        EditMessageText editMarkup = new EditMessageText();
+
+        editMarkup.setChatId(chatId);
+        editMarkup.setInlineMessageId(callbackquery.getInlineMessageId());
+        editMarkup.setText(convert("Виберіть час оповіщення"));
+        editMarkup.enableMarkdown(true);
+        editMarkup.setMessageId(callbackquery.getMessage().getMessageId());
 
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
 
-        rowsInline.add(createRowKeyboardWith3Button("9","9","10","10","11","11"));
-        rowsInline.add(createRowKeyboardWith3Button("12","12","13","13","14","14"));
-        rowsInline.add(createRowKeyboardWith3Button("15","15","16","16","17","17"));
-        rowsInline.add(createRowKeyboardWith2Button("18","18",convert("Виключити оповіщення"),"off notific"));
+        rowsInline.add(createRowKeyboardWith3Button("9","9","10","10","11","11", timeSetting));
+        rowsInline.add(createRowKeyboardWith3Button("12","12","13","13","14","14", timeSetting));
+        rowsInline.add(createRowKeyboardWith3Button("15","15","16","16","17","17", timeSetting));
+        List<InlineKeyboardButton> rowInlineFour = new ArrayList<>();
+
+        InlineKeyboardButton button1 = new InlineKeyboardButton("18");
+        button1.setCallbackData("18");
+        if (timeSetting.equals("18")) {
+            button1.setText("\u2705 "+ "18");
+        } else {
+            button1.setText("18");
+        }
+        InlineKeyboardButton button2 = new InlineKeyboardButton(convert("Виключити оповіщення"));
+        button2.setCallbackData("off notific");
+        if (timeSetting.equals("off notific")) {
+            button2.setText("\u274c");
+        } else {
+            button2.setText(convert("Викл." ));
+        }
+        rowInlineFour.add(button1);
+        rowInlineFour.add(button2);
+
+        List<InlineKeyboardButton> rowInlineFive = new ArrayList<>();
+
+        InlineKeyboardButton but6 = new InlineKeyboardButton(convert("Назад"));
+        but6.setCallbackData("back");
+        rowInlineFive.add(but6);
+
+        rowsInline.add(rowInlineFour);
+        rowsInline.add(rowInlineFive);
+
 
         markupInline.setKeyboard(rowsInline);
 
-        answer.setReplyMarkup(markupInline);
-
+        editMarkup.setReplyMarkup(markupInline);
         try {
-            execute(answer);
+            execute(editMarkup);
         } catch (TelegramApiException e) {
-            System.out.println("FUCK error" + e);
+            e.printStackTrace();
         }
     }
 
