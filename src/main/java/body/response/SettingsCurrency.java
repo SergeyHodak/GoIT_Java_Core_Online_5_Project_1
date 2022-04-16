@@ -1,7 +1,6 @@
 package body.response;
 
 import lombok.Data;
-
 import java.math.BigDecimal;
 
 @Data

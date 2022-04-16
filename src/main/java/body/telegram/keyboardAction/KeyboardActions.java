@@ -8,7 +8,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -284,7 +283,8 @@ public class KeyboardActions extends BotConnection {
 
     private List<InlineKeyboardButton> createRowKeyboardWith3Button(String textB1, String callbackDataB1,
                                                                     String textB2, String callbackDataB2,
-                                                                    String textB3, String callbackDataB3, String dataToCompare) {
+                                                                    String textB3, String callbackDataB3,
+                                                                    String dataToCompare) {
         List<InlineKeyboardButton> rowInlineFirst = new ArrayList<>();
         InlineKeyboardButton button1 = new InlineKeyboardButton(textB1);
         button1.setCallbackData(callbackDataB1);
@@ -358,7 +358,6 @@ public class KeyboardActions extends BotConnection {
         rowsInline.add(createRowKeyboardWith3Button("9","9","10","10","11","11", timeSetting));
         rowsInline.add(createRowKeyboardWith3Button("12","12","13","13","14","14", timeSetting));
         rowsInline.add(createRowKeyboardWith3Button("15","15","16","16","17","17", timeSetting));
-       // rowsInline.add(createRowKeyboardWith2Button("18","18",convert("Виключити оповіщення"),"off notific",timeSetting));
         List<InlineKeyboardButton> rowInlineFour = new ArrayList<>();
 
         InlineKeyboardButton button1 = new InlineKeyboardButton("18");

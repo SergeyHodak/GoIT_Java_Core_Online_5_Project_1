@@ -4,7 +4,6 @@ import lombok.Data;
 import body.response.DataCaching;
 import body.response.SettingsCurrency;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
 import javax.naming.OperationNotSupportedException;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
