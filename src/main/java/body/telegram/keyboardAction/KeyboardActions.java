@@ -1,6 +1,5 @@
 package body.telegram.keyboardAction;
 
-import body.FSM.FSM;
 import body.telegram.BotConnection;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -9,13 +8,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 public class KeyboardActions extends BotConnection {
     private String chatId;
-    FSM fsm = new FSM();
     public KeyboardActions(String chatId) throws Exception {
         this.chatId = chatId;
     }
@@ -98,13 +97,13 @@ public class KeyboardActions extends BotConnection {
         }
     }
 
-    public void sendGetCurrency() {
+    public void sendGetCurrency(String info) {
         SendMessage answer = new SendMessage();
         answer.setChatId(chatId);
 
         String defaultInfoMessage = null;
         try {
-            defaultInfoMessage = fsm.getInfo();
+            defaultInfoMessage = info;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -203,28 +202,28 @@ public class KeyboardActions extends BotConnection {
         List<InlineKeyboardButton> rowInlineThree = new ArrayList<>();
         List<InlineKeyboardButton> rowInlineFour = new ArrayList<>();
         InlineKeyboardButton but1 = new InlineKeyboardButton();
-        but1.setCallbackData("privat");
-        if (bank.equals("privat")) {
-            but1.setText("\u2705 Приват");
+        but1.setCallbackData("PB");
+        if (bank.equals("PB")) {
+            but1.setText("\u2705" + convert("Приват"));
         } else {
-            but1.setText("Приват");
+            but1.setText(convert("Приват"));
         }
 
-        InlineKeyboardButton but2 = new InlineKeyboardButton("Моно");
-        but2.setCallbackData("monobank");
+        InlineKeyboardButton but2 = new InlineKeyboardButton(convert("Моно"));
+        but2.setCallbackData("Monobank");
 
-        if (bank.equals("monobank")) {
-            but2.setText("\u2705 Моно");
+        if (bank.equals("Monobank")) {
+            but2.setText("\u2705" + convert("Моно"));
         } else {
-            but2.setText("Моно");
+            but2.setText(convert("Моно"));
         }
         InlineKeyboardButton but3 = new InlineKeyboardButton("4");
-        but3.setCallbackData("nbu");
+        but3.setCallbackData("NBU");
 
-        if (bank.equals("nbu")) {
-            but3.setText("\u2705 НБУ");
+        if (bank.equals("NBU")) {
+            but3.setText("\u2705" + convert("НБУ"));
         } else {
-            but3.setText("НБУ");
+            but3.setText(convert("НБУ"));
         }
         InlineKeyboardButton but4 = new InlineKeyboardButton(convert("Назад"));
         but4.setCallbackData("back");
@@ -369,12 +368,12 @@ public class KeyboardActions extends BotConnection {
         } else {
             button1.setText("18");
         }
-        InlineKeyboardButton button2 = new InlineKeyboardButton("Виключити оповіщення");
+        InlineKeyboardButton button2 = new InlineKeyboardButton(convert("Виключити оповіщення"));
         button2.setCallbackData("off notific");
         if (timeSetting.equals("off notific")) {
             button2.setText("\u274c");
         } else {
-            button2.setText("Викл." );
+            button2.setText(convert("Викл." ));
         }
         rowInlineFour.add(button1);
         rowInlineFour.add(button2);

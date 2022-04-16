@@ -107,5 +107,7 @@ public class BotConnection extends TelegramLongPollingCommandBot {
             }, c.getTime(), 86400000); // it is 24h
         }
     }
-
+    private String convert(String text) {
+        return new String(text.getBytes(), StandardCharsets.UTF_8);
+    }
 }

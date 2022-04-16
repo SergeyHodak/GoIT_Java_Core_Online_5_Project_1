@@ -80,9 +80,9 @@ public class FSM {
     void stateBanks() {
 
         switch (message) {
-            case "nbu":
-            case "privat":
-            case "monobank":
+            case "NBU":
+            case "PB":
+            case "Monobank":
                 chatSettings.setBank(message);
                 listener.getKeyBoard().sendBankMenu(update, chatSettings.getBank());
                 break;
@@ -151,7 +151,8 @@ public class FSM {
     }
 
     void getInfoAbCurrency() throws Exception {
-        listener.getKeyBoard().sendGetCurrency();
+       String info = getInfo();
+        listener.getKeyBoard().sendGetCurrency(info);
         setMainMenu();
     }
 
