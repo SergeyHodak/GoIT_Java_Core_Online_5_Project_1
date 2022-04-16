@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +22,9 @@ public class KeyboardActions extends BotConnection {
 
     public void sendStart() {
         StringBuilder messageBuilder = new StringBuilder();
-        messageBuilder.append("Вітаю \uD83D\uDC4B\uD83C\uDFFB ").append("\n");
-        messageBuilder.append("даний бот допоможе відслідковувати актуальні курси валют");
+
+        messageBuilder.append(convert("Вітаю")).append(" \uD83D\uDC4B\uD83C\uDFFB ")
+                .append("\n").append(convert("даний бот допоможе відслідковувати актуальні курси валют"));
 
         SendMessage answer = new SendMessage();
 
@@ -33,17 +34,15 @@ public class KeyboardActions extends BotConnection {
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
 
-        rowsInline.add(createRowKeyboardWith1Button("Отримати інформацію","getInfoAbCourse"));
-        rowsInline.add(createRowKeyboardWith1Button("Налаштування","settings"));
+        rowsInline.add(createRowKeyboardWith1Button(convert("Отримати інформацію"), "getInfoAbCourse"));
+        rowsInline.add(createRowKeyboardWith1Button(convert("Налаштування"), "settings"));
 
         markupInline.setKeyboard(rowsInline);
 
         answer.setReplyMarkup(markupInline);
         try {
             execute(answer);
-        } catch (TelegramApiException e) {
-            //BotLogger.error(LOGTAG, e);
-        }
+        } catch (TelegramApiException e) {}
     }
 
     public void setCurrency(Update u, boolean checkUSD, boolean checkEUR) {
@@ -53,7 +52,7 @@ public class KeyboardActions extends BotConnection {
 
         editMarkup.setChatId(chatId);
         editMarkup.setInlineMessageId(callbackquery.getInlineMessageId());
-        editMarkup.setText("Виберіть валюту в якій ви хочете отримувати курс");
+        editMarkup.setText(convert("Виберіть валюту в якій ви хочете отримувати курс"));
         editMarkup.enableMarkdown(true);
         editMarkup.setMessageId(callbackquery.getMessage().getMessageId());
 
@@ -71,7 +70,6 @@ public class KeyboardActions extends BotConnection {
             but1.setText("USD");
         }
 
-
         InlineKeyboardButton but2 = new InlineKeyboardButton("EUR");
         but2.setCallbackData("EUR");
 
@@ -80,7 +78,7 @@ public class KeyboardActions extends BotConnection {
         } else {
             but2.setText("EUR");
         }
-        InlineKeyboardButton but3 = new InlineKeyboardButton("Назад");
+        InlineKeyboardButton but3 = new InlineKeyboardButton(convert("Назад"));
         but3.setCallbackData("back");
         rowInlineFirst.add(but1);
         rowInlineSecond.add(but2);
@@ -117,14 +115,12 @@ public class KeyboardActions extends BotConnection {
         } catch (TelegramApiException e) {
             System.out.println("FUCK error" + e);
         }
-
-
     }
 
     public void sendCountSignMenu() {
         SendMessage answer = new SendMessage();
         answer.setChatId(chatId);
-        answer.setText("Виберіть кількість знаків після коми");
+        answer.setText(convert("Виберіть кількість знаків після коми"));
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
 
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
@@ -146,15 +142,14 @@ public class KeyboardActions extends BotConnection {
     public void sendBankMenu() {
         SendMessage answer = new SendMessage();
         answer.setChatId(chatId);
-        answer.setText("Виберіть банк з якого хочете отримувати данні");
+        answer.setText(convert("Виберіть банк з якого хочете отримувати данні"));
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
 
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
 
-
-        rowsInline.add(createRowKeyboardWith1Button("Приват","privat"));
-        rowsInline.add(createRowKeyboardWith1Button("Моно","monobank"));
-        rowsInline.add(createRowKeyboardWith1Button("НБУ","nbu"));
+        rowsInline.add(createRowKeyboardWith1Button(convert("Приват"), "privat"));
+        rowsInline.add(createRowKeyboardWith1Button(convert("Моно"), "monobank"));
+        rowsInline.add(createRowKeyboardWith1Button(convert("НБУ"), "nbu"));
 
         markupInline.setKeyboard(rowsInline);
 
@@ -186,13 +181,10 @@ public class KeyboardActions extends BotConnection {
         rowInline.add(button2);
 
         return rowInline;
-
-
-
     }
+
     private List<InlineKeyboardButton> createRowKeyboardWith3Button(String textB1, String callbackDataB1,String textB2, String callbackDataB2,String textB3, String callbackDataB3) {
         List<InlineKeyboardButton> rowInlineFirst = new ArrayList<>();
-
         InlineKeyboardButton button1 = new InlineKeyboardButton(textB1);
         button1.setCallbackData(callbackDataB1);
         InlineKeyboardButton button2 = new InlineKeyboardButton(textB2);
@@ -209,17 +201,17 @@ public class KeyboardActions extends BotConnection {
 
         SendMessage answer = new SendMessage();
         answer.setChatId(chatId);
-        answer.setText("Налаштування");
+        answer.setText(convert("Налаштування"));
 
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
 
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
 
-        rowsInline.add(createRowKeyboardWith1Button("Кількість знаків після коми","countSign"));
-        rowsInline.add(createRowKeyboardWith1Button("Банк","bank"));
-        rowsInline.add(createRowKeyboardWith1Button("Валюти","currency"));
-        rowsInline.add(createRowKeyboardWith1Button("Час оповіщення","timeNotific"));
-        rowsInline.add(createRowKeyboardWith1Button("Головна","main"));
+        rowsInline.add(createRowKeyboardWith1Button(convert("Кількість знаків після коми"),"countSign"));
+        rowsInline.add(createRowKeyboardWith1Button(convert("Банк"),"bank"));
+        rowsInline.add(createRowKeyboardWith1Button(convert("Валюти"),"currency"));
+        rowsInline.add(createRowKeyboardWith1Button(convert("Час оповіщення"),"timeNotific"));
+        rowsInline.add(createRowKeyboardWith1Button(convert("Головна"),"main"));
 
         markupInline.setKeyboard(rowsInline);
 
@@ -233,11 +225,9 @@ public class KeyboardActions extends BotConnection {
     }
 
     public void sendTimeMenu() {
-
         SendMessage answer = new SendMessage();
         answer.setChatId(chatId);
-        answer.setText("Виберіть час оповіщення");
-
+        answer.setText(convert("Виберіть час оповіщення"));
 
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
@@ -245,8 +235,7 @@ public class KeyboardActions extends BotConnection {
         rowsInline.add(createRowKeyboardWith3Button("9","9","10","10","11","11"));
         rowsInline.add(createRowKeyboardWith3Button("12","12","13","13","14","14"));
         rowsInline.add(createRowKeyboardWith3Button("15","15","16","16","17","17"));
-        rowsInline.add(createRowKeyboardWith2Button("18","18","Виключити оповіщення","off notific"));
-
+        rowsInline.add(createRowKeyboardWith2Button("18","18",convert("Виключити оповіщення"),"off notific"));
 
         markupInline.setKeyboard(rowsInline);
 
@@ -259,4 +248,7 @@ public class KeyboardActions extends BotConnection {
         }
     }
 
+    private String convert(String text) {
+        return new String(text.getBytes(), StandardCharsets.UTF_8);
+    }
 }

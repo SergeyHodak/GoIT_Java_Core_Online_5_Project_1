@@ -20,17 +20,6 @@ public class ChatSettings {
         bank = "NBU";
         quantityOfSignsAfterDot = 2;
         doNotify = true;
-        notificationHour = 9;
+        notificationHour = 19;
     }
-//    @Override
-//    public String toString(){
-//        String result = "";
-//        result += ("isUsdNeed = " + isUsdNeed);
-//        result += ("\nisEurNeed = " + isEurNeed);
-//        result += ("\nbank = " + bank);
-//        result += ("\nquantityOfSignsAfterDot =  = " + quantityOfSignsAfterDot);
-//        result += ("\ndoNotify = " + doNotify);
-//        result += ("\nnotificationHour = " + notificationHour);
-//        return result;
-//    }
 }

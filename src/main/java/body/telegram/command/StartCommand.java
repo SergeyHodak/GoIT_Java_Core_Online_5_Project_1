@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,8 +23,9 @@ public class StartCommand extends BotCommand {
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
         StringBuilder messageBuilder = new StringBuilder();
         String userName = user.getFirstName();
-        messageBuilder.append("Вітаю \uD83D\uDC4B\uD83C\uDFFB ").append(userName).append("\n");
-        messageBuilder.append("даний бот допоможе відслідковувати актуальні курси валют");
+        messageBuilder.append(convert("Вітаю")).append(" \uD83D\uDC4B\uD83C\uDFFB ")
+                .append(userName).append("\n")
+                .append(convert("даний бот допоможе відслідковувати актуальні курси валют"));
 
         SendMessage answer = new SendMessage();
 
@@ -35,11 +36,10 @@ public class StartCommand extends BotCommand {
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
 
-        InlineKeyboardButton but1 = new InlineKeyboardButton("Отримати інформацію");
+        InlineKeyboardButton but1 = new InlineKeyboardButton(convert("Отримати інформацію"));
         but1.setCallbackData("getInfoAbCourse");
 
-        InlineKeyboardButton but2 = new InlineKeyboardButton("Налаштування");
-
+        InlineKeyboardButton but2 = new InlineKeyboardButton(convert("Налаштування"));
         but2.setCallbackData("settings");
         rowInline.add(but1);
         rowInline.add(but2);
@@ -55,4 +55,7 @@ public class StartCommand extends BotCommand {
         }
     }
 
+    private String convert(String text) {
+        return new String(text.getBytes(), StandardCharsets.UTF_8);
+    }
 }
