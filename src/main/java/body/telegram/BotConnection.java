@@ -12,14 +12,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Calendar;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.time.*;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -92,11 +86,9 @@ public class BotConnection extends TelegramLongPollingCommandBot {
 
         @Override
         public void onMessageReceived() {
-            ZoneId z = ZoneId.of("ECT") ;
-            LocalDate ld = LocalDate.now( z ) ;
-            LocalTime lt = LocalTime.of( 21 , 27 , 00 ) ; //before start program  - set right time
-            ZonedDateTime zdt =  ZonedDateTime.of( ld , lt , z ) ;
+
             Calendar c = Calendar.getInstance();
+
             c.set(Calendar.HOUR_OF_DAY, stateMashines.get(chatId).getChatSettings().getNotificationHour());
             c.set(Calendar.MINUTE, 00);
             c.set(Calendar.SECOND, 00);
