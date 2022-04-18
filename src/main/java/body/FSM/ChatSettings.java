@@ -19,7 +19,7 @@ public class ChatSettings {
         isEurNeed = true;
         bank = "NBU";
         quantityOfSignsAfterDot = 2;
-        doNotify = true;
-        notificationHour = 9;
+        doNotify = false;
+        //notificationHour = 9;
     }
 }

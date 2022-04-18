@@ -12,11 +12,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.nio.charset.StandardCharsets;
-import java.util.Calendar;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.time.*;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -45,18 +44,25 @@ public class BotConnection extends TelegramLongPollingCommandBot {
         return ConstantData.BOT_NAME;
     }
 
-    @SneakyThrows
+
     @Override
     public void processNonCommandUpdate(Update update) {
         String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
 
         if (!stateMashines.containsKey(chatId)) {
             FSM fsm = new FSM();
-            fsm.addListener(new MessageListener(chatId));
+            try {
+                fsm.addListener(new MessageListener(chatId));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             stateMashines.put(chatId, fsm);
         }
-        stateMashines.get(chatId).handle(update);
-
+        try {
+            stateMashines.get(chatId).handle(update);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -82,22 +88,31 @@ public class BotConnection extends TelegramLongPollingCommandBot {
         public void onMessageReceived() {
 
             Calendar c = Calendar.getInstance();
+
             c.set(Calendar.HOUR_OF_DAY, stateMashines.get(chatId).getChatSettings().getNotificationHour());
             c.set(Calendar.MINUTE, 00);
             c.set(Calendar.SECOND, 00);
 
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
+
                 @Override
                 public void run() {
 
-                    String message = "getInfo method";
-                    SendMessage sendMessage = new SendMessage();
-                    sendMessage.setText(message);
-                    sendMessage.setChatId(chatId);
+                    String message = null;
+                    try {
+                        message = stateMashines.get(chatId).getInfo();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
 
                     try {
-                        if(stateMashines.get(chatId).getChatSettings().isDoNotify()) {
+                        LocalDateTime localDateTime = LocalDateTime.now();
+                        if(stateMashines.get(chatId).chatSettings.getNotificationHour()==(localDateTime.getHour())) {
+                            SendMessage sendMessage = new SendMessage();
+                            sendMessage.setText(message);
+                            sendMessage.setChatId(chatId);
                             execute(sendMessage);
                         }
                     } catch (TelegramApiException e) {
@@ -107,6 +122,7 @@ public class BotConnection extends TelegramLongPollingCommandBot {
             }, c.getTime(), 86400000); // it is 24h
         }
     }
+
     private String convert(String text) {
         return new String(text.getBytes(), StandardCharsets.UTF_8);
     }

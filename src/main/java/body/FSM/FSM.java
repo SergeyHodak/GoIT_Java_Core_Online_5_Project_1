@@ -101,9 +101,12 @@ public class FSM {
             settings();
         } else {
             chatSettings.setNotificationHour(Integer.parseInt(message));
+            chatSettings.setDoNotify(true);
             listener.getKeyBoard().sendTimeMenu(update, String.valueOf(chatSettings.getNotificationHour()));
 
-        }
+
+
+            }
     }
 
     void stateCountSignAfterDot() {
@@ -187,10 +190,11 @@ public class FSM {
 
     void setTimeNotific() {
 
-        if (chatSettings.isDoNotify()) {
-            listener.getKeyBoard().sendTimeMenu(update, "Виключити оповіщення");
+        if (!chatSettings.isDoNotify()) {
+            listener.getKeyBoard().sendTimeMenu(update, "off notific");
         } else {
-            listener.getKeyBoard().sendCountSignMenu(update, chatSettings.getNotificationHour());
+            listener.getKeyBoard().sendTimeMenu(update, String.valueOf(chatSettings.getNotificationHour()));
+            listener.onMessageReceived();//send notification at specific time
         }
 
         try {
