@@ -19,6 +19,7 @@ import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class BotConnection extends TelegramLongPollingCommandBot {
     private Map<String, FSM> stateMashines;
@@ -45,17 +46,25 @@ public class BotConnection extends TelegramLongPollingCommandBot {
         return ConstantData.BOT_NAME;
     }
 
-    @SneakyThrows
+
     @Override
     public void processNonCommandUpdate(Update update) {
         String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
 
         if (!stateMashines.containsKey(chatId)) {
             FSM fsm = new FSM();
-            fsm.addListener(new MessageListener(chatId));
+            try {
+                fsm.addListener(new MessageListener(chatId));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             stateMashines.put(chatId, fsm);
         }
-        stateMashines.get(chatId).handle(update);
+        try {
+            stateMashines.get(chatId).handle(update);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -87,17 +96,23 @@ public class BotConnection extends TelegramLongPollingCommandBot {
 
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
-                @SneakyThrows
+
                 @Override
                 public void run() {
 
-                    String message = stateMashines.get(chatId).getInfo();
-                    SendMessage sendMessage = new SendMessage();
-                    sendMessage.setText(message);
-                    sendMessage.setChatId(chatId);
+                    String message = null;
+                    try {
+                        message = stateMashines.get(chatId).getInfo();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
 
                     try {
                         if(stateMashines.get(chatId).getChatSettings().isDoNotify()) {
+                            SendMessage sendMessage = new SendMessage();
+                            sendMessage.setText(message);
+                            sendMessage.setChatId(chatId);
                             execute(sendMessage);
                         }
                     } catch (TelegramApiException e) {
