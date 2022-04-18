@@ -108,12 +108,13 @@ public class BotConnection extends TelegramLongPollingCommandBot {
 
 
                     try {
-
+                        LocalDateTime localDateTime = LocalDateTime.now();
+                        if(stateMashines.get(chatId).chatSettings.getNotificationHour()==(localDateTime.getHour())) {
                             SendMessage sendMessage = new SendMessage();
                             sendMessage.setText(message);
                             sendMessage.setChatId(chatId);
                             execute(sendMessage);
-
+                        }
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
