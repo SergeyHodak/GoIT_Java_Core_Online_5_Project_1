@@ -18,7 +18,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 
-@EqualsAndHashCode(callSuper = true)
+
 @Data
 public class BotConnection extends TelegramLongPollingCommandBot {
     private Map<String, FSM> stateMashines;
@@ -56,7 +56,6 @@ public class BotConnection extends TelegramLongPollingCommandBot {
             stateMashines.put(chatId, fsm);
         }
         stateMashines.get(chatId).handle(update);
-
     }
 
     @Override
@@ -88,10 +87,11 @@ public class BotConnection extends TelegramLongPollingCommandBot {
 
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
+                @SneakyThrows
                 @Override
                 public void run() {
 
-                    String message = "getInfo method";
+                    String message = stateMashines.get(chatId).getInfo();
                     SendMessage sendMessage = new SendMessage();
                     sendMessage.setText(message);
                     sendMessage.setChatId(chatId);
@@ -107,6 +107,7 @@ public class BotConnection extends TelegramLongPollingCommandBot {
             }, c.getTime(), 86400000); // it is 24h
         }
     }
+
     private String convert(String text) {
         return new String(text.getBytes(), StandardCharsets.UTF_8);
     }

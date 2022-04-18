@@ -101,6 +101,7 @@ public class FSM {
             settings();
         } else {
             chatSettings.setNotificationHour(Integer.parseInt(message));
+            chatSettings.setDoNotify(true);
             listener.getKeyBoard().sendTimeMenu(update, String.valueOf(chatSettings.getNotificationHour()));
 
         }
@@ -190,7 +191,9 @@ public class FSM {
         if (chatSettings.isDoNotify()) {
             listener.getKeyBoard().sendTimeMenu(update, "Виключити оповіщення");
         } else {
-            listener.getKeyBoard().sendCountSignMenu(update, chatSettings.getNotificationHour());
+            listener.getKeyBoard().sendTimeMenu(update, String.valueOf(chatSettings.getNotificationHour()));
+
+            listener.onMessageReceived();//send notification in specific time
         }
 
         try {
