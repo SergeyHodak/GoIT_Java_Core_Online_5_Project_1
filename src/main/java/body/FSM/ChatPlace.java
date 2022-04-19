@@ -5,7 +5,7 @@ import javax.naming.OperationNotSupportedException;
 public enum ChatPlace {
     MAIN_MENU {
         @Override
-        ChatPlace goToSettings(){
+         ChatPlace goToSettings(){
             return ChatPlace.SETTINGS;
         }
         @Override
