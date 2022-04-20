@@ -5,6 +5,7 @@ import body.bank.CurrencyService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -15,7 +16,7 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 
 public class NBU implements CurrencyService {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -28,23 +29,19 @@ public class NBU implements CurrencyService {
                 .uri(URI.create(url))
                 .GET()
                 .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        return response;
+        return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
     public HashMap<String, BigDecimal> getRate() throws IOException, InterruptedException {
-        String stringOfCurrencies = "";
         HttpResponse<String> response = sendRequest();
-        stringOfCurrencies = String.valueOf(response.body());
+        String stringOfCurrencies = String.valueOf(response.body());
 
         Type typeToken = TypeToken
                 .getParameterized(List.class, JsonNBU.class)
                 .getType();
         List<JsonNBU> currencyItems = GSON.fromJson(stringOfCurrencies, typeToken);
 
-        HashMap<String, BigDecimal> currencyPB = getCurrenciesOfBankInHashMap(currencyItems);
-
-        return currencyPB;
+        return getCurrenciesOfBankInHashMap(currencyItems);
     }
 
     private static HashMap<String, BigDecimal> getCurrenciesOfBankInHashMap(List<JsonNBU> currencies) {
@@ -61,14 +58,15 @@ public class NBU implements CurrencyService {
 
     private static List<BigDecimal> getCurrenciesOfBank(Currency currency, List<JsonNBU> currencies) {
         List<BigDecimal> res = new ArrayList<>();
-        res.add(BigDecimal.valueOf(currencies.stream()
-                .filter(it -> it.getCc() == currency)
-                .map(JsonNBU::getRate)
-                .collect(Collectors.toList()).get(0)));
-        res.add(BigDecimal.valueOf(currencies.stream()
-                .filter(it -> it.getCc() == currency)
-                .map(JsonNBU::getRate)
-                .collect(Collectors.toList()).get(0)));
+        List<Function<JsonNBU, Float>> functions = new ArrayList<>();
+        functions.add(JsonNBU::getRate);
+        functions.add(JsonNBU::getRate);
+        for (Function<JsonNBU, Float> function : functions) {
+            res.add(BigDecimal.valueOf(currencies.stream()
+                    .filter(it -> it.getCc() == currency)
+                    .map(function)
+                    .findFirst().orElse(0.0F)));
+        }
         return res;
     }
 }
