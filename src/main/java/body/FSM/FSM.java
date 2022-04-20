@@ -77,19 +77,10 @@ public class FSM {
     }
 
     void stateBanks() {
-
-        switch (message) {
-            case "NBU":
-            case "PB":
-            case "Monobank":
-                chatSettings.setBank(message);
-                listener.getKeyBoard().sendBankMenu(update, chatSettings.getBank());
-                break;
-            case ("back"):
-                settings();
-                break;
-        }
-
+        if(message.equals("NBU") || message.equals("PB") || message.equals("Monobank")){
+            chatSettings.setBank(message);
+            listener.getKeyBoard().sendBankMenu(update, chatSettings.getBank());
+        } else settings();
     }
 
     void stateTimeNotific() {
@@ -103,26 +94,14 @@ public class FSM {
             chatSettings.setNotificationHour(Integer.parseInt(message));
             chatSettings.setDoNotify(true);
             listener.getKeyBoard().sendTimeMenu(update, String.valueOf(chatSettings.getNotificationHour()));
-
-
-
             }
     }
 
     void stateCountSignAfterDot() {
-
-        switch (message) {
-            case "2":
-            case "3":
-            case "4":
-                chatSettings.setQuantityOfSignsAfterDot(Integer.parseInt(message));
-                listener.getKeyBoard().sendCountSignMenu(update, chatSettings.getQuantityOfSignsAfterDot());
-                break;
-            case ("back"):
-                settings();
-                break;
-        }
-
+        if(message.equals("2") || message.equals("3") || message.equals("4")){
+            chatSettings.setQuantityOfSignsAfterDot(Integer.parseInt(message));
+            listener.getKeyBoard().sendCountSignMenu(update, chatSettings.getQuantityOfSignsAfterDot());
+        } else settings();
     }
 
     void stateCurrencies() {
@@ -146,7 +125,6 @@ public class FSM {
         listener.getKeyBoard().sendSeetingsMenu();
         try {
             chatPlace = chatPlace.goToSettings();
-
         } catch (OperationNotSupportedException e) {
             e.printStackTrace();
         }
@@ -157,7 +135,6 @@ public class FSM {
         listener.getKeyBoard().sendGetCurrency(info);
         setMainMenu();
     }
-
 
     void setCountSign() {
         listener.getKeyBoard().sendCountSignMenu(update, chatSettings.getQuantityOfSignsAfterDot());
@@ -170,7 +147,6 @@ public class FSM {
 
     void setBank() {
         listener.getKeyBoard().sendBankMenu(update, chatSettings.getBank());
-
         try {
             chatPlace = chatPlace.goToBanks();
         } catch (OperationNotSupportedException e) {
@@ -180,7 +156,6 @@ public class FSM {
 
     void setCurrency() {
         listener.getKeyBoard().setCurrency(update, chatSettings.isUsdNeed(), chatSettings.isEurNeed());
-
         try {
             chatPlace = chatPlace.goToCurrencies();
         } catch (OperationNotSupportedException e) {
@@ -196,7 +171,6 @@ public class FSM {
             listener.getKeyBoard().sendTimeMenu(update, String.valueOf(chatSettings.getNotificationHour()));
             listener.onMessageReceived();//send notification at specific time
         }
-
         try {
             chatPlace = chatPlace.goToTimeOfNotification();
         } catch (OperationNotSupportedException e) {
@@ -206,7 +180,6 @@ public class FSM {
 
     void setMainMenu() {
         listener.getKeyBoard().sendStart();
-
         try {
             chatPlace = chatPlace.goToMainMenu();
         } catch (OperationNotSupportedException e) {
@@ -262,7 +235,6 @@ public class FSM {
             result.append(currenciesData.get("EUR").getRateSell().setScale(rounding, RoundingMode.HALF_UP));
             result.append("\n\n");
         }
-
         result.deleteCharAt(result.length() - 1);
         result.deleteCharAt(result.length() - 1);
         return result.toString();

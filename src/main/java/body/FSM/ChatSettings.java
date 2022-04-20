@@ -11,15 +11,11 @@ public class ChatSettings {
     private boolean doNotify;
     private int notificationHour;
 
-    /**
-     * Default constructor
-     */
     public ChatSettings(){
         isUsdNeed = true;
         isEurNeed = true;
         bank = "NBU";
         quantityOfSignsAfterDot = 2;
         doNotify = false;
-        //notificationHour = 9;
     }
 }
