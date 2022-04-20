@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group 'org.example'
@@ -36,3 +37,5 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+mainClassName = 'TelegramBotApp'
