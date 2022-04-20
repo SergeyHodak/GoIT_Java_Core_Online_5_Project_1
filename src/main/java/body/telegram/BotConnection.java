@@ -90,8 +90,8 @@ public class BotConnection extends TelegramLongPollingCommandBot {
             Calendar c = Calendar.getInstance();
 
             c.set(Calendar.HOUR_OF_DAY, stateMashines.get(chatId).getChatSettings().getNotificationHour());
-            c.set(Calendar.MINUTE, 00);
-            c.set(Calendar.SECOND, 00);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
 
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
@@ -102,22 +102,24 @@ public class BotConnection extends TelegramLongPollingCommandBot {
                     String message = null;
                     try {
                         message = stateMashines.get(chatId).getInfo();
+
+                        try {
+                            LocalDateTime localDateTime = LocalDateTime.now();
+                            if(stateMashines.get(chatId).chatSettings.getNotificationHour()==(localDateTime.getHour())) {
+                                SendMessage sendMessage = new SendMessage();
+                                sendMessage.setText(message);
+                                sendMessage.setChatId(chatId);
+                                execute(sendMessage);
+                            }
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
 
-                    try {
-                        LocalDateTime localDateTime = LocalDateTime.now();
-                        if(stateMashines.get(chatId).chatSettings.getNotificationHour()==(localDateTime.getHour())) {
-                            SendMessage sendMessage = new SendMessage();
-                            sendMessage.setText(message);
-                            sendMessage.setChatId(chatId);
-                            execute(sendMessage);
-                        }
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
+
                 }
             }, c.getTime(), 86400000); // it is 24h
         }
