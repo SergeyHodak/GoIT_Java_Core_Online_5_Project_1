@@ -84,6 +84,7 @@ public class FSM {
     }
 
     void stateTimeNotific() {
+        listener.onMessageReceived();
         if (message.equals("off notific")) {
             chatSettings.setDoNotify(!chatSettings.isDoNotify());
             listener.getKeyBoard().sendTimeMenu(update, "off notific");
@@ -169,7 +170,6 @@ public class FSM {
             listener.getKeyBoard().sendTimeMenu(update, "off notific");
         } else {
             listener.getKeyBoard().sendTimeMenu(update, String.valueOf(chatSettings.getNotificationHour()));
-            listener.onMessageReceived();//send notification at specific time
         }
         try {
             chatPlace = chatPlace.goToTimeOfNotification();
