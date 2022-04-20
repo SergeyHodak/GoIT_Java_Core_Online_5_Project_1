@@ -15,7 +15,6 @@ import java.time.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class BotConnection extends TelegramLongPollingCommandBot {
@@ -43,7 +42,6 @@ public class BotConnection extends TelegramLongPollingCommandBot {
         return ConstantData.BOT_NAME;
     }
 
-
     @Override
     public void processNonCommandUpdate(Update update) {
         String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
@@ -70,8 +68,8 @@ public class BotConnection extends TelegramLongPollingCommandBot {
     }
 
     private class MessageListener implements StateMachineListener {
-        private String chatId;
-        private KeyboardActions keyboard;
+        private final String chatId;
+        private final KeyboardActions keyboard;
 
         public MessageListener(String chatId) throws Exception {
             this.chatId = chatId;
@@ -116,9 +114,6 @@ public class BotConnection extends TelegramLongPollingCommandBot {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-
-
                 }
             }, c.getTime(), 86400000); // it is 24h
         }

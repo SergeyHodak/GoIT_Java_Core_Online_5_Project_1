@@ -50,7 +50,7 @@ public class StartCommand extends BotCommand {
         try {
             absSender.execute(answer);
         } catch (TelegramApiException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 

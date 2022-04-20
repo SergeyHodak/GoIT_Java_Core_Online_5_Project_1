@@ -123,7 +123,7 @@ public class FSM {
     }
 
     void settings() {
-        listener.getKeyBoard().sendSeetingsMenu();
+        listener.getKeyBoard().sendSettingsMenu();
         try {
             chatPlace = chatPlace.goToSettings();
         } catch (OperationNotSupportedException e) {
