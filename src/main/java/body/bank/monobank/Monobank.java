@@ -15,7 +15,7 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 
 public class Monobank implements CurrencyService {
     private static final String url = "https://api.monobank.ua/bank/currency";
@@ -28,24 +28,21 @@ public class Monobank implements CurrencyService {
                 .uri(URI.create(url))
                 .GET()
                 .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        return response;
+        return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
     @Override
     public HashMap<String, BigDecimal> getRate() throws IOException, InterruptedException {
-        String stringOfCurrencies = "";
         HttpResponse<String> response = sendRequest();
-        stringOfCurrencies = String.valueOf(response.body());
+        String stringOfCurrencies = String.valueOf(response.body());
 
         Type typeToken = TypeToken
                 .getParameterized(List.class, JsonMB.class)
                 .getType();
-        List<JsonMB> currencyItems = GSON.fromJson(stringOfCurrencies, typeToken);
+        List<JsonMB> currencyItems;
+        currencyItems = GSON.fromJson(stringOfCurrencies, typeToken);
 
-        HashMap<String, BigDecimal> currencyMB = getCurrenciesOfBankInHashMap(currencyItems);
-
-        return currencyMB;
+        return getCurrenciesOfBankInHashMap(currencyItems);
     }
 
     private static HashMap<String, BigDecimal> getCurrenciesOfBankInHashMap(List<JsonMB> currencies) {
@@ -62,14 +59,16 @@ public class Monobank implements CurrencyService {
 
     private static List<BigDecimal> getCurrenciesOfBank(Integer currency, List<JsonMB> currencies) {
         List<BigDecimal> res = new ArrayList<>();
-        res.add(BigDecimal.valueOf(currencies.stream()
-                .filter(it -> it.getCurrencyCodeA() == currency)
-                .map(JsonMB::getRateBuy)
-                .collect(Collectors.toList()).get(0)));
-        res.add(BigDecimal.valueOf(currencies.stream()
-                .filter(it -> it.getCurrencyCodeA() == currency)
-                .map(JsonMB::getRateSell)
-                .collect(Collectors.toList()).get(0)));
+        List<Function<JsonMB, Float>> functions = new ArrayList<>();
+        functions.add(JsonMB::getRateBuy);
+        functions.add(JsonMB::getRateSell);
+        for (Function<JsonMB, Float> function : functions) {
+            res.add(BigDecimal.valueOf(currencies.stream()
+                    .filter(it -> it.getCurrencyCodeA() == currency)
+                    .map(function)
+                    .findFirst().orElse(0.0F)));
+        }
+
         return res;
     }
 }

@@ -13,20 +13,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KeyboardActions extends BotConnection {
-    private String chatId;
+    private final String chatId;
     public KeyboardActions(String chatId) throws Exception {
         this.chatId = chatId;
     }
 
     public void sendStart() {
-        StringBuilder messageBuilder = new StringBuilder();
-
-        messageBuilder.append(convert("Вітаю")).append(" \uD83D\uDC4B\uD83C\uDFFB ")
-                .append("\n").append(convert("даний бот допоможе відслідковувати актуальні курси валют"));
+        String messageBuilder = convert("Вітаю") + " \uD83D\uDC4B\uD83C\uDFFB " +
+                "\n" + convert("даний бот допоможе відслідковувати актуальні курси валют");
 
         SendMessage answer = new SendMessage();
 
-        answer.setText(messageBuilder.toString());
+        answer.setText(messageBuilder);
         answer.setChatId(chatId);
 
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
@@ -40,7 +38,9 @@ public class KeyboardActions extends BotConnection {
         answer.setReplyMarkup(markupInline);
         try {
             execute(answer);
-        } catch (TelegramApiException e) {}
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setCurrency(Update u, boolean checkUSD, boolean checkEUR) {
@@ -256,30 +256,6 @@ public class KeyboardActions extends BotConnection {
         rowInlineFirst.add(button);
         return rowInlineFirst;
     }
-    private List<InlineKeyboardButton> createRowKeyboardWith2Button(String textB1, String callbackDataB1,
-                                                                    String textB2, String callbackDataB2,String dataToCompare) {
-        List<InlineKeyboardButton> rowInline = new ArrayList<>();
-
-        InlineKeyboardButton button1 = new InlineKeyboardButton(textB1);
-        button1.setCallbackData(callbackDataB1);
-        if (dataToCompare.equals(callbackDataB1)) {
-            button1.setText("\u2705 "+ textB1);
-        } else {
-            button1.setText(textB1);
-        }
-        InlineKeyboardButton button2 = new InlineKeyboardButton(textB2);
-        button2.setCallbackData(callbackDataB2);
-        if (dataToCompare.equals(callbackDataB2)) {
-            button2.setText("\u2705 "+ textB2);
-        } else {
-            button2.setText(textB2);
-        }
-
-        rowInline.add(button1);
-        rowInline.add(button2);
-
-        return rowInline;
-    }
 
     private List<InlineKeyboardButton> createRowKeyboardWith3Button(String textB1, String callbackDataB1,
                                                                     String textB2, String callbackDataB2,
@@ -313,7 +289,7 @@ public class KeyboardActions extends BotConnection {
         return rowInlineFirst;
     }
 
-    public void sendSeetingsMenu() {
+    public void sendSettingsMenu() {
 
         SendMessage answer = new SendMessage();
         answer.setChatId(chatId);

@@ -9,5 +9,5 @@ public class JsonNBU {
     private String txt;
     private float rate;
     private Currency cc;
-    private String exchangedate;
+    private String exchangeDate;
 }

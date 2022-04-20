@@ -84,7 +84,7 @@ public class FSM {
     }
 
     void stateTimeNotific() {
-        listener.onMessageReceived();//send notification at specific time
+        listener.onMessageReceived();
         if (message.equals("off notific")) {
             chatSettings.setDoNotify(!chatSettings.isDoNotify());
             listener.getKeyBoard().sendTimeMenu(update, "off notific");
@@ -95,9 +95,6 @@ public class FSM {
             chatSettings.setNotificationHour(Integer.parseInt(message));
             chatSettings.setDoNotify(true);
             listener.getKeyBoard().sendTimeMenu(update, String.valueOf(chatSettings.getNotificationHour()));
-
-
-
             }
     }
 
@@ -126,7 +123,7 @@ public class FSM {
     }
 
     void settings() {
-        listener.getKeyBoard().sendSeetingsMenu();
+        listener.getKeyBoard().sendSettingsMenu();
         try {
             chatPlace = chatPlace.goToSettings();
         } catch (OperationNotSupportedException e) {
@@ -173,7 +170,7 @@ public class FSM {
             listener.getKeyBoard().sendTimeMenu(update, "off notific");
         } else {
             listener.getKeyBoard().sendTimeMenu(update, String.valueOf(chatSettings.getNotificationHour()));
-                    }
+        }
         try {
             chatPlace = chatPlace.goToTimeOfNotification();
         } catch (OperationNotSupportedException e) {
